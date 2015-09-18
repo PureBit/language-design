@@ -1,6 +1,8 @@
 * Local declarations use a `let...[and]...in` syntax.
 
-* The local declarations can be mutually recursive, i.e. are analogous to `letrec`.
+* The local declarations before the `in` can be mutually recursive , i.e. are
+  analogous to `letrec`. To be very clear, such declarations are separated by
+  an `and`.
 
 * `let` is an expression, and the result of the `in` expression is the result of
   the whole `let` expression.
