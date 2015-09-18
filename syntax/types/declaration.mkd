@@ -5,7 +5,7 @@
 E.G.
 ```PureBit
 f: x -> x
-f x = x + x
+f x := x + x
 ```
 
 That is, type declaration uses `:` instead of Haskell's `::`.
