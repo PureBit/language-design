@@ -1,0 +1,6 @@
+* I will be using colon-equals notation for top-level declarations, e.g.
+
+```PureBit
+f: x -> x
+f := x + x
+```
