@@ -5,8 +5,12 @@
 * `let` is an expression, and the result of the `in` expression is the result of the whole `let` expression.
 
 Formal grammar[1]:
+```HF
   LetExpr   = let Declblock in Expr
   DeclBlock = SepO(Decl, and)
+```
+
+(N.B. HF refers to Habit Form.)
 
 E.G.:
   ```PureBit
