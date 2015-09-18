@@ -1,0 +1,13 @@
+* Separate type declaration from function declaration (like Haskell).
+
+* Use category theory syntax for type declarations.
+
+E.G.
+```PureBit
+f: x -> x
+f x = x + x
+```
+
+That is, type declaration uses `:` instead of Haskell's `::`.
+
+Also, it uses the set theory syntax of the `->` operator to denote mapping from one type to another. This is the same as Haskell.
