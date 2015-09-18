@@ -16,7 +16,7 @@ Formal grammar[1]:
 E.G.:
   ```
   f: I32 -> I32 -> I32
-  f x y =
+  f x y :=
     let add m n := m + n
     and sub m n := m `add` ~n
     and mult m n := match (m,n) with (a,b) | a == 0 || b == 0 |-> 0
@@ -31,7 +31,7 @@ E.G.:
 ceremony. Revising the above example accordingly:
   ```
   f: I32 -> I32 -> I32
-  f x y =
+  f x y :=
     let add m n := m + n
         sub m n := m `add` ~n
         mult m n | m = 0 || n = 0 := 0
