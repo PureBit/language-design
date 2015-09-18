@@ -2,18 +2,17 @@
 
 * The local declarations can be mutually recursive, i.e. are analogous to `letrec`.
 
-* `let` is an expression, and the result of the `in` expression is the result of the whole `let` expression.
+* `let` is an expression, and the result of the `in` expression is the result of
+  the whole `let` expression.
 
 Formal grammar[1]:
-```HF
+```
   LetExpr   = let Declblock in Expr
   DeclBlock = SepO(Decl, and)
 ```
 
-(N.B. HF refers to Habit Form.)
-
 E.G.:
-  ```PureBit
+  ```
   f: I32 -> I32 -> I32
   f x y =
     let add m n := m + n
@@ -23,10 +22,12 @@ E.G.:
                                 or   (_,b) | b = ~1           |-> 0 `sub` m
                                 or   (_,b) | b = 1            |-> m
                                 or   (_,b) | b > 1            |-> (m `add` x) `mult` (n `sub` 1)
-    in x `mult` y```
+    in x `mult` y
+  ```
 
-I will certainly be employing (optional) light-weight grammar to minimize ceremony. Revising the above example accordingly:
-  ```PureBit
+* I will certainly be employing (optional) light-weight grammar to minimize
+ceremony. Revising the above example accordingly:
+  ```
   f: I32 -> I32 -> I32
   f x y =
     let add m n := m + n
@@ -36,9 +37,11 @@ I will certainly be employing (optional) light-weight grammar to minimize ceremo
                  | n = ~1         := 0 `sub` m
                  | n = 1          := m
                  | n > 1          := (m `add` x) `mult` (n `sub` 1)
-    in x `mult` y```
+    in x `mult` y
+  ```
 
-Haskell uses braces and semicolons to manage scope and statements, but I would rather do so explicitly with English terms, e.g. `and`.
+* Haskell uses braces and semicolons to manage scope and statements, but I would
+  rather do so explicitly with English terms, e.g. `and`.
 
 [1] Uses formal grammar notation from the Habit Report (see 3.1):
       http://hasp.cs.pdx.edu/habit-report-Nov2010.pdf
