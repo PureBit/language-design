@@ -1,0 +1,7 @@
+* Local declarations are made with a recursive `let...in`, i.e. a `letrec`.
+
+The syntax is roughly:
+
+  let {expr1; expr2; expre3; ...; exprN} in {expr}
+
+* This follows the Haskell syntax.
