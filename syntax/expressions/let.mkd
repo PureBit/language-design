@@ -1,7 +1,40 @@
-* Local declarations are made with a recursive `let...in`, i.e. a `letrec`.
+* Local declarations use a `let...[and]...in` syntax.
 
-The syntax is roughly:
+* The local declarations can be mutually recursive, i.e. are analogous to `letrec`.
 
-  let {expr1; expr2; expre3; ...; exprN} in {expr}
+* `let` is an expression, and the result of the `in` expression is the result of the whole `let` expression.
 
-* This follows the Haskell syntax.
+Formal grammar[1]:
+  LetExpr   = let Declblock in Expr
+  DeclBlock = SepO(Decl, and)
+
+E.G.:
+  ```PureBit
+  f: I32 -> I32 -> I32
+  f x y =
+    let add m n := m + n
+    and sub m n := m `add` ~n
+    and mult m n := match (m,n) with (a,b) | a == 0 || b == 0 |-> 0
+                                or   (_,b) | b < ~1           |-> (m `add` x) `mult` (n `add` 1)
+                                or   (_,b) | b = ~1           |-> 0 `sub` m
+                                or   (_,b) | b = 1            |-> m
+                                or   (_,b) | b > 1            |-> (m `add` x) `mult` (n `sub` 1)
+    in x `mult` y```
+
+I will certainly be employing (optional) light-weight grammar to minimize ceremony. Revising the above example accordingly:
+  ```PureBit
+  f: I32 -> I32 -> I32
+  f x y =
+    let add m n := m + n
+        sub m n := m `add` ~n
+        mult m n | m = 0 || n = 0 := 0
+                 | n < ~1         := (m `add` x) `mult` (n `add` 1)
+                 | n = ~1         := 0 `sub` m
+                 | n = 1          := m
+                 | n > 1          := (m `add` x) `mult` (n `sub` 1)
+    in x `mult` y```
+
+Haskell uses braces and semicolons to manage scope and statements, but I would rather do so explicitly with English terms, e.g. `and`.
+
+[1] Uses formal grammar notation from the Habit Report (see 3.1):
+      http://hasp.cs.pdx.edu/habit-report-Nov2010.pdf
