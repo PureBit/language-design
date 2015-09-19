@@ -1,0 +1,15 @@
+* I know that I want Martin-Lof dependent types, but I've yet to work out the
+  details of this.
+
+* I know that DT type-checking is undecidable, so I'll have to figure out the
+  best way to address that issue. ATS-style constraint checking?[1]
+
+* I like Cayenne's approach to DTs, though of course there is a lot I'd
+  change.[2]
+
+* Given that PureBit is a systems language, data is unboxed, and I will have
+  to figure out a way to make the types reflect this. That being said, I'll
+  probably put boxed types in the safe-use library, along with a GC.
+
+* I don't know how to do this quite yet - or even if it is possible - but I want
+  to build up all of the types from a basic type of a bit & its respective address.
