@@ -21,3 +21,8 @@ I think that the `:->` operator is better. And when an object is mapped in
 reverse, I will use the `<-:` operator. Though `|->` and `<-|` is closer to the
 map operator in math, i.e. `↦`, using the UTF8 is just not practical, and the
 ASCII equivalents are not very good. Hence, the alternatives.
+
+* N.B. The above uses some kind of typed Lambda calculus notation. Since I plan
+  on using dependent types, the above example only showcases some of the syntax,
+  and is not representative. When I work out the DT syntax & semantics, I'll
+  update the example.
