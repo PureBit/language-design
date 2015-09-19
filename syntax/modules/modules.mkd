@@ -1,0 +1,24 @@
+* My knowledge of module systems is cursory. Still, I've enjoyed playing with
+  SML's module system (especially functors), and want to bring that power
+  to PureBit.
+
+* Further, I'm impressed by Cayenne's simplification & unification of a
+  powerful first-class module system. I'm curious to see if I can make that
+  work for me.[1]
+
+* I like the idea of first-class modules, but I don't know the theory about all
+  this nearly well-enough to know if it's possible on the low-level of PureBit
+  (I suspect it is).
+
+* I also want to modularize type classes, thereby getting overloading, etc.,
+  but without the issues.[2]
+
+* Finally, I feel that a good module system can provide the basis for really
+  good package management[3].
+
+[1] http://fsl.cs.illinois.edu/images/5/5e/Cayenne.pdf
+
+[2] http://www.cs.cmu.edu/~rwh/papers/mtc/full.pdf
+
+[3] http://blog.ezyang.com/2014/08/the-fundamental-problem-of-programming-language-package-management/
+
