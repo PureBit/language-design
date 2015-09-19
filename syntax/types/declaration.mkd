@@ -2,12 +2,22 @@
 
 * Use category theory syntax for type declarations.
 
+* Types are capitalized (functions & objects are lower-case).
+
 E.G.
 ```PureBit
-f: x -> x
+f: X -> X
 f x := x + x
 ```
 
 That is, type declaration uses `:` instead of Haskell's `::`.
 
-Also, it uses the set theory syntax of the `->` operator to denote mapping from one type to another. This is the same as Haskell.
+Also, it uses the set theory syntax of the `->` operator to denote mapping from
+one type to another. This is the same as Haskell.
+
+~~However, when objects map to other other objects, the `|->` operator is used
+instead.~~
+I think that the `:->` operator is better. And when an object is mapped in
+reverse, I will use the `<-:` operator. Though `|->` and `<-|` is closer to the
+map operator in math, i.e. `↦`, using the UTF8 is just not practical, and the
+ASCII equivalents are not very good. Hence, the alternatives.
