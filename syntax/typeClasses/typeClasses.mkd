@@ -1,0 +1,3 @@
+* I like type classes, but I want them to be modularized[1].
+
+[1] http://www.cs.cmu.edu/~rwh/papers/mtc/full.pdf
