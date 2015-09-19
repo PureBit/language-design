@@ -1,0 +1,9 @@
+* Simply put, I really like Haskell's solution to effects, i.e. monads. I know
+  that some people hate them, and some people feel that they are unnecessary,
+  but I really enjoy writing code with them. And this is my language, after
+  all.
+
+* I'm pretty sure that I'll be able to manage effects in a pure systems language
+  with monads, but I won't know until I try. I know it's possible in a language
+  like Habit, but the type system I have in mind for PureBit is a lot more
+  complicated.
