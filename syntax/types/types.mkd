@@ -1,11 +1,10 @@
-* I know that I want Martin-Lof dependent types, but I've yet to work out the
-  details of this.
+* I just read a couple of the papers coming out of Penn about Haskell 8.
+  Not gonna lie, I'm convinced that theirs is the right approach to dependent
+  types. Something like Idris or ATS is just not realistic. I'll probably
+  build on their theoretical foundation, and adapt it to suit my specific
+  needs.
 
-* I know that DT type-checking is undecidable, so I'll have to figure out the
-  best way to address that issue. ATS-style constraint checking?[1]
-
-* I like Cayenne's approach to DTs, though of course there is a lot I'd
-  change.[2]
+* I really like Cayenne's simplicity[1]. I'm going to try to make that syntax work with the System V semantics in the low-level domain.
 
 * Given that PureBit is a systems language, data is unboxed, and I will have
   to figure out a way to make the types reflect this. That being said, I'll
@@ -16,6 +15,4 @@
   The idea is to build types that fit the hardware perfectly per, e.g. some 
   ISO specification.
 
-[1] http://ats-lang.org/
-
-[2] http://fsl.cs.illinois.edu/images/5/5e/Cayenne.pdf
+[1] http://fsl.cs.illinois.edu/images/5/5e/Cayenne.pdf
