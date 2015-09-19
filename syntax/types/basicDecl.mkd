@@ -18,7 +18,7 @@ one type to another. This is the same as Haskell.
 However, when objects map to other other objects, the `|->` operator is used
 instead.
 
-* N.B. The above uses some kind of typed Lambda calculus notation. Since I plan
-  on using dependent types, the above example only succeeds in showing some
-  of my syntax preferences, but is not representative. When I work out the
-  DT syntax & semantics, I'll update the example.
+* N.B. The above uses some kind of typed Lambda calculus notation. I just read
+  about System V for GHC 8, and I'm sold. However, type inference with the SMT
+  solver is pretty complicated, so there are a lot of details to figure out
+  before I can really work out the details of the syntax here.
