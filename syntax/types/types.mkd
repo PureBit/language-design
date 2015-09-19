@@ -13,3 +13,7 @@
 
 * I don't know how to do this quite yet - or even if it is possible - but I want
   to build up all of the types from a basic type of a bit & its respective address.
+
+[1] http://ats-lang.org/
+
+[2] http://fsl.cs.illinois.edu/images/5/5e/Cayenne.pdf
