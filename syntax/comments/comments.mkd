@@ -1,0 +1,14 @@
+* I like SuccessorML's commenting syntax. Namely:
+
+```
+  Comments     = Blockcomment
+               | Linecomment
+  Blockcomment = Startcomment Block Endcomment
+  Startcomment = (*
+  Block        = Expression
+               | Module
+               | Declaration
+               | Comments                      (comments can be nested)
+  Endcomment   = *)
+  Linecomment  = (*)
+```
