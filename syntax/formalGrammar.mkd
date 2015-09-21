@@ -190,15 +190,17 @@ Kinds and Types
 
 N.B. I have yet to develop the type system, and so this section is very sparse.
 That said, I do have some strong sympathies:
-  1)  I want dependent types, but also need to retain type checking (and some
-      type inference?). I feel that the best approach is to borrow heavily from
-      Dependent Haskell[4].
-  2)  I want a powerful module system with first-class modules, and manage
-      type classes through that. I need to see whether System FC + Kind
-      Equality can support this. If it can, I would like to implement
-      type classes this[5] way.
-  3)  I *really* like Cayenne's radical simplifications. To the extent it is
-      possible, I want to use Cayenne's syntax & semantics[6].
+1)  I want dependent types, but also need to retain type checking (and some
+    type inference if possible). I feel that the best approach is to borrow
+    heavily from Dependent Haskell[4].
+
+2)  I want a powerful module system with first-class modules, and manage
+    type classes through that. I need to see whether System FC + Kind
+    Equality can support this. If it can, I would like to implement
+    type classes this[5] way.
+
+3)  I *really* like Cayenne's radical simplifications. To the extent it is
+    possible, I want to use Cayenne's syntax & semantics[6].
 
 Design Sketches
 ---------------
