@@ -4,11 +4,10 @@ Formal Grammar
 This document houses the formal grammar of PureBit.
 
 (I have decided to design the language using one FG document to make it easier
-for me to keep track of the transformation rules.)
+for me to keep track of the production rules.)
 
-N.B. I have yet to work out the theoretical elements of PureBit, so it
-exceedingly difficult to design much. I will record what I can, but the rest
-will merely be sketches to try out design ideas.
+N.B. I have yet to work out the theoretical elements of PureBit. Until that
+hard work is done, the syntax is largely cosmetic.
 
 Credit
 ------
@@ -27,14 +26,16 @@ Specifically:
 * Keywords are written in lowercase.
 * The following is the set of all notational symbols: {`|` `(` `)` `,` `=`}
   (spaces denote a separator). To represent terminals that use the same symbol,
-  they will be encases in double quotes, e.g. ",".
+  they will be encased in double quotes, e.g. ",".
 * Grammar rules are written:
+
   ```
   N = rhs1
     | ...
     | rhsn
   ```
-  where `N` is a nonterminal name and each right hand side (rhs) is a sequence
+
+  where `n` is a nonterminal name and each right hand side (rhs) is a sequence
   of symbols corresponding to a production. Each production may span multiple
   lines so long as all the of the symbols are indented to the right of the
   initial `=` or `|`.
@@ -84,6 +85,7 @@ Lexical Syntax
 * *Comments.*
   PureBit uses very similar conventions to Haskell, with the exception that
   comments can be nested, e.g.
+
   ```
   (*) All three comment blocks are commented out, as the upper level is not
   (*) closed off prematurely at the first *) right after the second comment
@@ -96,11 +98,13 @@ Lexical Syntax
   [Comment block]
   *) End upper level
   ```
+
   Also, the syntax is that of SuccessorML, namely `(*)` denotes a single line
   comment that begins at the `(*)` and terminates at the end of the line it
   was used on; `(* ... *)` denotes a comment block that can span multiple
   lines (and, per the above, be nested with single line comments & further 
   comment blocks). This adheres to the following pseudo-productions:
+
   ```
   Comments      = Linecomment
                 | Commentblock
@@ -109,6 +113,7 @@ Lexical Syntax
   Block         = Comments
                 | (* any valid character *)
   ```
+
 * *Literate files.*
   While not formally part of the language, PureBit implementations are
   expected to support the use of literate files, most likely matching the
@@ -126,6 +131,7 @@ Lexical Syntax
   following productions show how these alternatives are integrated in the syntax
   for variable names and operator symbols that is used elsewhere in the
   grammar:
+
   ```
   Var     = Varid         (*) Variables
           | "(" Varsym ")"
@@ -140,7 +146,9 @@ Lexical Syntax
   Id      = Varid         (*) Identifiers
           | Conid
   ```
+
   The syntax for type expressions is very similar:
+
   ```
   Tyvar     = Varid           (*) Type variable
   Tyvarop   = ` Varid `       (*) Type variable operators
@@ -153,6 +161,7 @@ Lexical Syntax
   Tyop      = Tyvarop         (*) Type operators
             | Tyconop
   ```
+
 * *Integer Literals.*
   Largely follows the syntax of Haskell, but adopts the following extensions:
   * *Binary literals.*
@@ -196,6 +205,7 @@ Design Sketches
 
 * Function declaration is more mathematical. In Haskell, you would write the
   `LiftM2` monad as follows[7]:
+
   ```Haskell
   liftM2 :: Monad m => (a -> b -> c) -> m a -> m b -> m c
   liftM2 op mx my = do
@@ -203,13 +213,17 @@ Design Sketches
     y <- my
     return (x `op` y)
   ```
+
   The mathematical notation is:
+
   ```
   liftM2: for_all M: monad, (A1 -> A2 -> R) -> M A1 -> M A2 -> M R =
   op |-> m1 |-> m2 |-> bind m1 (a1 |-> bind m2 (a2 |-> return (op a1 a2)))
   ```
+
   What I have in mind is to use Haskell syntax sugar on the mathematical
   version:
+
   ```PureBit
   liftM2: for_all m: Monad, (a -> b -> c) -> m a -> m b -> m c =
           (op, mx, my) |-> do
@@ -217,6 +231,7 @@ Design Sketches
             y <- my
             return (x `op` y)
   ```
+
   What I like about this:
     1)  Math tends to be pretty elegant, and I'd like PureBit to be an elegant
         language.
@@ -224,6 +239,7 @@ Design Sketches
         that of the theoretical basis its type system is founded on.
     3)  If I can make type inference work, then the above can be simplified
         further:
+
         ```PureBit
         liftM2: (op, mx, my) |-> do
           x <- mx
@@ -238,22 +254,26 @@ Design Sketches
   problem.
   Of course, there's the question of how to declare an anonymous function.
   Here's my preference:
+
   ```PureBit
   f: x |-> let g: y, z |-> y + z
            and h: a, b |-> a - b
            and i: |-> g o h
            in i x x x
   ```
+
   As the example demonstrates, functions can be curried, and anonymous
   functions don't even need variables (compare this to Haskell's `\`).
 * `let` = `letrec` on `and`. 
 * PureBit also has `where` clauses.
 * Case expressions use a slightly different syntax than Haskell. Namely:
+
   ```
   f: x |-> match x with 0 |-> 1
                    or   1 |-> 2
                    or   2 |-> 3
   ```
+
   Of course, it's possible to use light-weight syntax and not use `or`.
 * In general, I prefer `and`s and `or`s and `end`s over braces and semicolons.
   That being said, generated code is more readable with the latter - but why
@@ -268,3 +288,4 @@ Footnotes
 [4]   https://ghc.haskell.org/trac/ghc/wiki/DependentHaskell
 [5]   http://www.cs.cmu.edu/~rwh/papers/mtc/full.pdf
 [6]   http://fsl.cs.illinois.edu/images/5/5e/Cayenne.pdf
+[7]   https://en.wikipedia.org/wiki/Monad_(functional_programming)#Generic_monadic_functions
