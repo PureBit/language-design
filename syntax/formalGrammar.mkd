@@ -268,7 +268,7 @@ Design Sketches
 * PureBit also has `where` clauses.
 * Case expressions use a slightly different syntax than Haskell. Namely:
 
-  ```
+  ```PureBit
   f: x |-> match x with 0 |-> 1
                    or   1 |-> 2
                    or   2 |-> 3
@@ -283,9 +283,15 @@ Footnotes
 ---------
 
 [1]   http://hasp.cs.pdx.edu/habit-report-Nov2010.pdf
+
 [2]   See page 8.
+
 [3]   I'm actually not clear on why `Inv` is not valid.
+
 [4]   https://ghc.haskell.org/trac/ghc/wiki/DependentHaskell
+
 [5]   http://www.cs.cmu.edu/~rwh/papers/mtc/full.pdf
+
 [6]   http://fsl.cs.illinois.edu/images/5/5e/Cayenne.pdf
+
 [7]   https://en.wikipedia.org/wiki/Monad_(functional_programming)#Generic_monadic_functions
