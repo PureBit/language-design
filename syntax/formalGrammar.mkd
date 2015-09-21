@@ -1,0 +1,265 @@
+Formal Grammar
+==============
+
+This document houses the formal grammar of PureBit.
+
+(I have decided to design the language using one FG document to make it easier
+for me to keep track of the transformation rules.)
+
+N.B. I have yet to work out the theoretical elements of PureBit, so it
+exceedingly difficult to design much. I will record what I can, but the rest
+will merely be sketches to try out design ideas.
+
+Credit
+------
+
+I want to make it *very* clear here that this document is *very* indebted to
+the Preliminary Habit Report[1]. Much of the following is ripped straight out
+of it with little modification.
+
+Notation
+--------
+
+This document uses the notation conventions of the Habit Report[2].
+
+Specifically:
+* Nonterminal symbols are written with an initioal capital letter.
+* Keywords are written in lowercase.
+* The following is the set of all notational symbols: {`|` `(` `)` `,` `=`}
+  (spaces denote a separator). To represent terminals that use the same symbol,
+  they will be encases in double quotes, e.g. ",".
+* Grammar rules are written:
+  ```
+  N = rhs1
+    | ...
+    | rhsn
+  ```
+  where `N` is a nonterminal name and each right hand side (rhs) is a sequence
+  of symbols corresponding to a production. Each production may span multiple
+  lines so long as all the of the symbols are indented to the right of the
+  initial `=` or `|`.
+* Fragments of grammar are annotated using SuccessorML commenting convention:
+  a `(*)` sequence introduces a one line comment that extends to the end of the
+  line on which it appears and a `(* ... *)` pair provides a nested comment that
+  may span multiple lines.
+* For clarity, `(* empty *)` is used to indicate an empty rhs.
+* Parameterized grammar definitions are allowed, i.e. the definition of a
+  nonterminal may be annotated with one or more formal parameters, written with
+  the initial upper case letter, enclosed in parentheses, and separated by
+  commas. Each use of a parameterized nonterminal in the right hand side of a
+  production should specify a sequence of symbols to be substituted by the
+  corresponding formal parameter. Below are some common patterns:
+  ```
+  Opt(X)    = (* empty *)   (*) optional X
+            | X
+  List(X)   = X             (*) one of more Xs
+            | X List(X)
+  ListO(X)  = Opt(List(X))  (*) one or more Xs
+  Sep(X,S)  = X             (*) one or more Xs separated by S
+            | X S Sep(X,S)
+  SepO(X,S) = Opt(Sep(X,S)) (*) zero or more Xs separated by S
+  Sep2(X,S) = X S Sep(X,S)  (*) two or more Xs separated by S
+  ```
+  Parameterized rules like these are interpreted as macros for generating
+  productions, and the grammar is only valid if the process of macro expansion
+  is guaranteed to terminate. For example, the following definition for `Inv`
+  is not valid[2]:
+  ```
+  Inv(X) = X Inv(Inv(X))  (*) invalid!
+  ```
+  On the other hand, the next definition, for `Inf`, is technically valid,
+  but not useful in practice becaue it does not derive any finite strings:
+  ```
+  Inf(X) = X Inf(X)
+  ```
+
+Lexical Syntax
+--------------
+
+* *Comments.*
+  PureBit uses very similar conventions to Haskell, with the exception that
+  comments can be nested, e.g.
+  ```
+  (*) All three comment blocks are commented out, as the upper level is not
+  (*) closed off prematurely at the first *) right after the second comment
+  (*) block -- as you would expect in, say, C.
+  (* (*) Begin upper level
+  [Comment block]
+  (* (*) Begin second level
+  [Comment block]
+  *) End second level
+  [Comment block]
+  *) End upper level
+  ```
+  Also, the syntax is that of SuccessorML, namely `(*)` denotes a single line
+  comment that begins at the `(*)` and terminates at the end of the line it
+  was used on; `(* ... *)` denotes a comment block that can span multiple
+  lines (and, per the above, be nested with single line comments & further 
+  comment blocks). This adheres to the following pseudo-productions:
+  ```
+  Comments      = Linecomment
+                | Commentblock
+  Linecomment   = "(" * ")" (* any valid character except EOL *) EOL 
+  Commentblock  = "(" * Block * ")"
+  Block         = Comments
+                | (* any valid character *)
+  ```
+* *Literate files.*
+  While not formally part of the language, PureBit implementations are
+  expected to support the use of literate files, most likely matching the
+  syntax of Literate Haskell.
+  In practice, PureBit implementations will distinguish between literate
+  and regular source code with the use of an `l` in the source file suffix.
+* *Identifiers and symbol syntax.*
+  Identifiers beginning with an upper case letter (represented by `Conid` in
+  the grammar) and symbols that begin with a leading color (represented by
+  `Consym`) are treated as constructors. Other identifiers (`Varid`) and symbols
+  (`Varsym`) are typically used as variables or operator names. Symbols may be
+  used in places where identifiers are expected by placing them between
+  parentheses, as in `(+)`. Identifiers may be used in places wehre operators
+  are expected by placing them between backticks, as in `\`div\``. The
+  following productions show how these alternatives are integrated in the syntax
+  for variable names and operator symbols that is used elsewhere in the
+  grammar:
+  ```
+  Var     = Varid         (*) Variables
+          | "(" Varsym ")"
+  Varop   = Varsym        (*) Variable operators
+          | ` Varid `
+  Con     = Conid         (*) Constructors
+          | "(" Consym ")"
+  Conop   = Consym        (*) Constructor operators
+          | ` Conid `
+  Op      = Varop         (*) Operators
+          | Conop
+  Id      = Varid         (*) Identifiers
+          | Conid
+  ```
+  The syntax for type expressions is very similar:
+  ```
+  Tyvar     = Varid           (*) Type variable
+  Tyvarop   = ` Varid `       (*) Type variable operators
+  Tycon     = Con             (*) Type constructors
+            | "(" Varsym ")"
+            | "(" -> ")"
+  Tyconop   = Conop           (*) Type constructor operators
+            | Varsym
+            | ->
+  Tyop      = Tyvarop         (*) Type operators
+            | Tyconop
+  ```
+* *Integer Literals.*
+  Largely follows the syntax of Haskell, but adopts the following extensions:
+  * *Binary literals.*
+    In addition to decimal literals, hexadecimal literal (beginning with `0x`
+    or `0X` and followed by a sequnce of hexadecimal digits), and octal
+    literals (beginning with `0o` or `0O` and followed by a sequence of octal
+    literals), PureBit allows binary literal that being wither `0b` or `0B` and
+    are followed by a sequence of one of more binary digits.
+  * *Underscores.*
+    PureBit allows underscore character to be included at any point in an
+    integerAliteral (after the initial prefiex that specifies a radix, if
+    present). This can increase the readability of long literals, but are
+    otherwise ignored.
+  * *Literal suffixes.*
+    A single `K`, `M`, `T`, or `P` may be added to a numeric literal to denote
+    a multiplier of 2^10 (kilo-), 2^20 (mega-), 2^30 (giga-), 2^40 (tera-),
+    and 2^50 (peta-). Note the binary interpretations of these suffixes.
+* *Layout.*
+  PureBit uses a layout rule, as in Haskell, to allow automatic insertion of
+  the punctuation that is used for lists of declarations, alternatives,
+  statements, etc. Until I work out the full grammar, though, it is premature
+  to describe the details of the this.
+
+Kinds and Types
+---------------
+
+N.B. I have yet to develop the type system, and so this section is very sparse.
+That said, I do have some strong sympathies:
+  1)  I want dependent types, but also need to retain type checking (and some
+      type inference?). I feel that the best approach is to borrow heavily from
+      Dependent Haskell[4].
+  2)  I want a powerful module system with first-class modules, and manage
+      type classes through that. I need to see whether System FC + Kind
+      Equality can support this. If it can, I would like to implement
+      type classes this[5] way.
+  3)  I *really* like Cayenne's radical simplifications. To the extent it is
+      possible, I want to use Cayenne's syntax & semantics[6].
+
+Design Sketches
+---------------
+
+* Function declaration is more mathematical. In Haskell, you would write the
+  `LiftM2` monad as follows[7]:
+  ```Haskell
+  liftM2 :: Monad m => (a -> b -> c) -> m a -> m b -> m c
+  liftM2 op mx my = do
+    x <- mx
+    y <- my
+    return (x `op` y)
+  ```
+  The mathematical notation is:
+  ```
+  liftM2: for_all M: monad, (A1 -> A2 -> R) -> M A1 -> M A2 -> M R =
+  op |-> m1 |-> m2 |-> bind m1 (a1 |-> bind m2 (a2 |-> return (op a1 a2)))
+  ```
+  What I have in mind is to use Haskell syntax sugar on the mathematical
+  version:
+  ```PureBit
+  liftM2: for_all m: Monad, (a -> b -> c) -> m a -> m b -> m c =
+          (op, mx, my) |-> do
+            x <- mx
+            y <- my
+            return (x `op` y)
+  ```
+  What I like about this:
+    1)  Math tends to be pretty elegant, and I'd like PureBit to be an elegant
+        language.
+    2)  I suspect that the language will benefit greatly if its syntax mirrors
+        that of the theoretical basis its type system is founded on.
+    3)  If I can make type inference work, then the above can be simplified
+        further:
+        ```PureBit
+        liftM2: (op, mx, my) |-> do
+          x <- mx
+          y <- my
+          return (x `op` y)
+        ```
+
+* *Anonymous function.*
+  One interesting consequence of the above style is that it looks like it
+  replaces the lambda calculus with combinatory logic. I'll have to work
+  through the implications of that, but I don't think that it will be a
+  problem.
+  Of course, there's the question of how to declare an anonymous function.
+  Here's my preference:
+  ```PureBit
+  f: x |-> let g: y, z |-> y + z
+           and h: a, b |-> a - b
+           and i: |-> g o h
+           in i x x x
+  ```
+  As the example demonstrates, functions can be curried, and anonymous
+  functions don't even need variables (compare this to Haskell's `\`).
+* `let` = `letrec` on `and`. 
+* PureBit also has `where` clauses.
+* Case expressions use a slightly different syntax than Haskell. Namely:
+  ```
+  f: x |-> match x with 0 |-> 1
+                   or   1 |-> 2
+                   or   2 |-> 3
+  ```
+  Of course, it's possible to use light-weight syntax and not use `or`.
+* In general, I prefer `and`s and `or`s and `end`s over braces and semicolons.
+  That being said, generated code is more readable with the latter - but why
+  would anyone read generated code without pretty-printing it first?
+
+Footnotes
+---------
+
+[1]   http://hasp.cs.pdx.edu/habit-report-Nov2010.pdf
+[2]   See page 8.
+[3]   I'm actually not clear on why `Inv` is not valid.
+[4]   https://ghc.haskell.org/trac/ghc/wiki/DependentHaskell
+[5]   http://www.cs.cmu.edu/~rwh/papers/mtc/full.pdf
+[6]   http://fsl.cs.illinois.edu/images/5/5e/Cayenne.pdf
