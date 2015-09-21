@@ -258,12 +258,21 @@ Design Sketches
   ```PureBit
   f: x |-> let g: y, z |-> y + z
            and h: a, b |-> a - b
-           and i: |-> g o h
+           and i:      |-> g o h
            in i x x x
   ```
 
   As the example demonstrates, functions can be curried, and anonymous
   functions don't even need variables (compare this to Haskell's `\`).
+  Alternatively, the above can be cleaned up a bit with light-weight syntax:
+
+  ```PureBit
+  f: x |-> let g: y, z |-> y + z
+               h: a, b |-> a - b
+               i:      |-> g o h
+           in  i x x x
+  ```
+
 * `let` = `letrec` on `and`. 
 * PureBit also has `where` clauses.
 * Case expressions use a slightly different syntax than Haskell. Namely:
@@ -274,7 +283,14 @@ Design Sketches
                    or   2 |-> 3
   ```
 
-  Of course, it's possible to use light-weight syntax and not use `or`.
+  Of course, it's possible to use light-weight syntax and not use `or`:
+
+  ```PureBit
+  f: x |-> match x with 0 |-> 1
+                        1 |-> 2
+                        2 |-> 3
+  ```
+
 * In general, I prefer `and`s and `or`s and `end`s over braces and semicolons.
   That being said, generated code is more readable with the latter - but why
   would anyone read generated code without pretty-printing it first?
