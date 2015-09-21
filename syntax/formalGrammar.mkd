@@ -49,6 +49,7 @@ Specifically:
   commas. Each use of a parameterized nonterminal in the right hand side of a
   production should specify a sequence of symbols to be substituted by the
   corresponding formal parameter. Below are some common patterns:
+
   ```
   Opt(X)    = (* empty *)   (*) optional X
             | X
@@ -60,15 +61,19 @@ Specifically:
   SepO(X,S) = Opt(Sep(X,S)) (*) zero or more Xs separated by S
   Sep2(X,S) = X S Sep(X,S)  (*) two or more Xs separated by S
   ```
+
   Parameterized rules like these are interpreted as macros for generating
   productions, and the grammar is only valid if the process of macro expansion
   is guaranteed to terminate. For example, the following definition for `Inv`
   is not valid[2]:
+
   ```
   Inv(X) = X Inv(Inv(X))  (*) invalid!
   ```
+
   On the other hand, the next definition, for `Inf`, is technically valid,
   but not useful in practice becaue it does not derive any finite strings:
+
   ```
   Inf(X) = X Inf(X)
   ```
