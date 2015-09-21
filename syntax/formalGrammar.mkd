@@ -240,12 +240,12 @@ Design Sketches
     3)  If I can make type inference work, then the above can be simplified
         further:
 
-        ```PureBit
-        liftM2: (op, mx, my) |-> do
-          x <- mx
-          y <- my
-          return (x `op` y)
-        ```
+  ```PureBit
+     liftM2: (op, mx, my) |-> do
+       x <- mx
+       y <- my
+       return (x `op` y)
+  ```
 
 * *Anonymous function.*
   One interesting consequence of the above style is that it looks like it
