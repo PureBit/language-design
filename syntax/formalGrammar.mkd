@@ -82,7 +82,7 @@ Specifically:
   List(X)      = X             (*) one of more Xs
                | X List(X)
   ListO(X)     = Opt(List(X))  (*) zero or more Xs
-  Dif(X,Y)     = Z             (*) special: X \\ Y
+  Dif(X,Y)     = Z             (*) special: X \ Y
   Sep(X,S)     = X             (*) one or more Xs separated by S
                | X S Sep(X,S)
   SepO(X,S)    = Opt(Sep(X,S)) (*) zero or more Xs separated by S
@@ -250,7 +250,7 @@ This section covers the (admittedly sparse) declaration syntax of PureBit.
                      where f = (* some binary function *)
   ```
 
-  (Where `/\\` is a big lambda, `\\` is a little lambda, `.` is lambda
+  (Where `/\` is a big lambda, `\` is a little lambda, `.` is lambda
   application, `:` is the typed lambda calculus notation for "has type of",
   `:=` is definition notation, and `|->` is a mapping).
 
@@ -278,7 +278,7 @@ This section covers the (admittedly sparse) declaration syntax of PureBit.
 
 * *Anonymous function.*
 
-  PureBit uses Haskell's `\\` lambda operator, but uses `.` instead of the
+  PureBit uses Haskell's `\` lambda operator, but uses `.` instead of the
   `->` operator. Otherwise, the syntax for anonymous functions is identical.
 
   For example:
