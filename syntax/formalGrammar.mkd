@@ -243,18 +243,18 @@ This section covers the (admittedly sparse) declaration syntax of PureBit.
   The mathematical notation is something like:
 
   ```
-  liftM2 op m1 m2 := /\a. /\b. /\c. /\d
-                  .  \x. \y. \z
+  liftM2 op m1 m2 := /\a. /\b. /\c
+                  .  \f. \x. \y
                   :  (a -> b -> c) -> M a -> M b -> M c where M: monad
-                  :  bind (M x) (x |-> bind (M y) (y |-> return (f x y)))
-                     where f = (* some binary function *)
+                  :  bind (M x) (x |-> bind (M y) (y |-> return (x `f` y)))
   ```
 
   (Where `/\` is a big lambda, `\` is a little lambda, `.` is lambda
   application, `:` is the typed lambda calculus notation for "has type of",
   `:=` is definition notation, and `|->` is a mapping).
 
-  What I have in mind is to radically simplify the mathematical notation:
+  What I have in mind is to radically simplify the mathematical notation,
+  as much of it can be made implicit:
 
   ```PureBit
   liftM2 op mx my := (a -> b -> c) -> m a -> m b -> m c where m: Monad
