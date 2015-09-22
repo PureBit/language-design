@@ -267,8 +267,8 @@ This section covers the (admittedly sparse) declaration syntax of PureBit.
   together in the same declaration. This makes functions self-documenting.
   This seems like a sweet marriage of Haskell's and ML's type syntax.
 
-  Further, as PureBit will have type inference, declarations can be
-  simplified:
+  Further, as PureBit will have type inference, type signatures can usually
+  be left out:
 
   ```PureBit
   liftM2 op mx my := do x <- mx
