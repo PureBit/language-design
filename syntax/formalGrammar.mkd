@@ -284,18 +284,19 @@ This section covers the (admittedly sparse) declaration syntax of PureBit.
   For example:
 
   ```PureBit
-  f x := let g := \ y z . y + z
-         and h := \ a b . a - b
-         and i := \ g o h
-          in i x x x
+  f x := let g := \ y . y * 1
+         and h := \ z . 2 - b
+         and i := g `of` h
+          in i x
   ```
 
 * *Function composition.*
 
   I prefer to use the `.` symbol as the lambda application operator rather
-  than function composition. However, as composition is so vital, the letter
-  `o` is reserved as a special infix function for composition.
-
+  than function composition. For that, for now I'll use `of`. Note, though, the
+  backticks, making it consistent with the syntax for all other non-symbol
+  infix expressions.
+  
 * *Let expressions.*
 
   These have the general form `let Decl1 and Decl2 and ... Decln in Expr`.
@@ -310,6 +311,8 @@ This section covers the (admittedly sparse) declaration syntax of PureBit.
                  :  \ y . n + y
           in g x x
   ```
+
+  Also, light-weight syntax can infer the `and`s.
 
 * PureBit allows for `where` clauses, but they are a little different:
   * They can be inserted into both the type declaration and the function
@@ -342,6 +345,8 @@ This section covers the (admittedly sparse) declaration syntax of PureBit.
   giving the programmer a way eliminate unnecessary code.
 
 * In general, I prefer `and`s and `or`s and `end`s over braces and semicolons.
+  Admittedly, the latter is simpler, requiring only three lexemes. However,
+  the former feels more intuitive to me - and parsing it is really no big deal.
 
 Footnotes
 ---------
