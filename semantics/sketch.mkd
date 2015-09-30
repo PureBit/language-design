@@ -110,6 +110,29 @@ PureBit is dependently typed per System FC with explicit kinds[1].
 
 Further, it closely follows the syntax and semantics of Cayenne[2].
 
+Systems Programming
+-------------------
+
+PureBit is a systems programming language. As such, there is a primitive
+type, namely `Bit`. It is a dependent type with an address and a bit value.
+While `Bit` is not part of PureBit's core language, it is part of the standard,
+such that it must be defined in the derived forms, and implemented so that
+it is represented as thinly as in C.
+
+Further, the standard must also include the keyword `area`, which defines a
+data structure that must be, ultimately, atomically composed of the `Bit` DS.
+These can be complex, composed of several levels of `area` DS', but ultimately
+the DS must decompose to the `Bit` type.
+
+In order to get predictable performance, the evaluation strategy is strict.
+
+The language is pure.
+
+Finally, state is managed with monads.
+
+Footnotes
+---------
+
 [1] http://www.cis.upenn.edu/~eir/papers/2013/fckinds/fckinds.pdf
 
 [2] http://fsl.cs.illinois.edu/images/5/5e/Cayenne.pdf
