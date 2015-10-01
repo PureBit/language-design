@@ -1,0 +1,81 @@
+Design Overview
+===============
+
+This document gives a rough overview of the design of PureBit.
+
+History
+-------
+
+The following have been PureBit's core design features from the very beginning:
+* Purely functional
+* State handled with monads
+* Low-level
+* Eager evaluation
+* Modular
+* Module interfaces
+* Strongly typed
+* Safe
+* Efficient
+
+The design was very ad-hoc at first.
+
+At some point, I became very interested in using dependent types to handle
+safety.
+
+I looked at ATS, but felt that using a constraint solver was too
+much of a PITA.
+
+I then tried out Cayenne's approach. Initially, this was very exciting:
+explicit typing made programming with depenent types more straight-
+forward, decideability was (perhaps) possible because every type decomposed to a
+bit type, and the language had a very exciting record type. However, when I
+started playing around with coding in it, I realized that it was kind of a PITA,
+too.
+
+It was at this point that I came back to Habit. While designing a dependent
+type system that decomposed to bits, I worked thourgh Habit's kind & type
+system, and became convinced that MPJ & Co. had the right idea.
+* _Types System._
+
+  I wanted dependent types because they allowed to type check what would
+  overwise be unsafe code, and in so doing guarantee its safety at compile
+  time.
+
+  For one, Habit's type system, with its multiple kinds, allows for this for
+  free.
+
+  Further, it's trivial to add Habit's kinds to the System FC variant with
+  explicit kind equality. While it doesn't provide for all of the features
+  a full dependent type system gives as in Agda, this gives me *a lot* of
+  fancy types.
+
+  Finally, type checking is decideable and in linear time, and type inference
+  is possible in most cases.
+
+* _Systems Programming._
+
+  Simply put, Habit has a lot of features to make it a very good language for
+  systems programming. Borrowing heavily from it allows me to use those.
+
+* _Ergonomics._
+
+  Programming in Haskell - and Habit by extension - is an incredibly pleasant
+  experience. This way PureBit gets to have that, too :)
+
+Feature Set
+-----------
+
+PureBit is essentially a cross between Dependent Haskell & Habit, plus Backpack
+as it's module system.
+
+The full list:
+* System FC with explicit kind equality as the intermediate language.
+
+* Borrow very heavily from Habit (e.g. kind system, eager evaluation, monads).
+
+* Add Dependent Haskell features (e.g. GADTs) to the language.
+
+* Backpack module system.
+
+That should get me a language that's very expressive, fun to use, safe,
+efficient, modular, etc.
