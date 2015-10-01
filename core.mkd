@@ -1,0 +1,43 @@
+Core
+====
+
+This is the PureBit core language.
+
+Further, depending on how it goes, I might also have the core translate to
+System FC with explicit kind equality (System FCE).
+
+Notes
+-----
+
+Cayenne is a wonderful language, and I would love to use it as a basis for
+PureBit. I feel that it is incredibly elegant, and very much want to bring
+that elegance to PureBit.
+
+However, Cayenne's type checking is undecidable. This is despite the fact that
+it is explicitly typed.
+
+Simply put, it is not strongly normalizing.
+
+The hope is that by requiring all types to decompose to a `Bit`, I can make it
+strongly normalizing.
+
+It's TBD, but below I will include the core language, along with proofs of
+its decidability.
+
+(My sense is that I will have to exclude objects of type `*`, as this would
+not decompose until run-time.)
+
+(That being said, if I use explicit kind equality, I might be able to get
+normal form regardless. I don't care for using PureBit for first-order
+logic, but care much more about consolidating types, modules, classes, and
+expressions under the same syntax - and keeping type checking, and ideally
+type inference.)
+
+I should mention that decidability is so important that I will toss the Cayenne
+syntax and adopt a Dependent Haskell + Habit hybrid instead of try to use
+Cayenne's time-out work-around.
+
+Finally, I want to explore translating the core language into System FC with
+explicit kind equality. The idea there is to have something that makes it
+really straight-forward to reuse Haskell's optimizations. That might not be
+an option, though.
