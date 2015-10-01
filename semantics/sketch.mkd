@@ -1,128 +1,36 @@
 Sketch
 ======
 
-This document sketches out PureBit's semantics. It is by no means complete,
-and I have a lot of work to do before I can be sure of its correctness.
-
-That being said, I've got a good feeling that this all checks out.
+This document sketches out the key theoretical constructs.
 
 Basic Idea
 ----------
 
-PureBit is an abstract structure, namely a class, such that the elements of
-that class are are well-typed programs. Programs that are not well-typed will
-not be compiled.
+The core language is System FC with explicit kind equality[1].
 
-Abstract Structure
-------------------
+The source language will be the closest thing I can get a variant of Cayenne[2]
+to compile into System FCwEKE.
 
-Categories are abstract structures composed of a class of abstract structures,
-i.e. obj(C), and a class of morphisms on that class of abstract structures,
-i.e. hom(C). These abstract structures have the properties of associativity
-on their morphisms (e.g. X -> Y,  Y -> Z, therefore X -> Z), and that each
-object has an identity morphism (e.g. X -> X).
-
-A class is a category, the objects of which are sets with a class property, and
-the morphisms of which are functions.
-
-PureBit is a class, the class property of which is a well-typed record. The
-only morphism is the identity morphism, and there are no morphisms between
-different program-level record objects. However, within these program-level
-record objects, there are three objects, and they are all first-class, and
-categories in their own right, with plenty of morphisms each:
-* The dependent record
-
-* The dependent function
-
-* Data
-
-Record Objects
---------------
-As a category, a record has a class of objects and a class of morphisms.
-
-Objects of the record category are explicitly declared with the `sig` keyword.
-
-There is only one morphism in the class of morphisms of the record category,
-namely the identity morphism.
-
-Records are themselves categories.
-
-Objects of a specific record are explicitly declared with the `struct` keyword.
-
-There are many morphisms in the class of morphisms in the category of each
-record object. These are similar to SML functors.
-
-Example of `sig`:
-
-  ```
-  type IntSet :=
-    sig   type T
-      and empty: T
-      and singleton: Int -> T
-      and union: T -> T -> T
-      and number: Int -> T -> Bool
-    end
-  ```
-
-  Or, with syntactic sugar:
-
-  ```
-  type IntSet := sig
-    type T
-    empty: T
-    singleton: Int -> T
-    union: T -> T -> T
-    number: Int -> T -> Bool
-  ```
-
-Example of `struct`:
-
-  ```
-  naiveSet: IntSet
-  naiveSet := struct
-    abstract type T := Int -> Bool
-    empty x := False
-    singleton x x' := x = x'
-    union s t x := s x || t x
-    member x s = s x
-  ```
-
-Example of `functor`:
-  (TBD)
-
-Data
-----
-
-Data objects are defined with the `data` keyword.
-
-As with record objects, data is a category. As such, it has a class of
-objects, i.e. values of a particular type, and morphisms, i.e. functions.
-
-PureBit The Language
---------------------
-
-An object of the PureBit category is a well-typed program. A
-well-typed program is nothing more than an implicit record object. Type
-classes, modules, record types, etc. are all first-class objects, and the
-objects within these are scoped inside their instantiation.
-
-PureBit is dependently typed per System FC with explicit kinds[1].
-
-Further, it closely follows the syntax and semantics of Cayenne[2].
+I honestly don't know how far I will get, but I am excited to find out!
 
 Systems Programming
 -------------------
 
 PureBit is a systems programming language. As such, there is a primitive
-type, namely `Bit`. It is a dependent type with an address and a bit value.
-While `Bit` is not part of PureBit's core language, it is part of the standard,
-such that it must be defined in the derived forms, and implemented so that
-it is represented as thinly as in C.
+type, namely `Bit`. It is a dependent type with an address and a bit value,
+so its full declaration is more like `Bit Address Bvalue`. While `Bit` is not
+part of PureBit's core language, it is part of the standard, such that it must
+be defined in the derived forms, and implemented so that it is represented as
+thinly as in C.
+
+(This does assume that I will be able to implement dependent types in PureBit.)
 
 Further, the standard must also include the keyword `area`, which defines a
-data structure that must be, ultimately, atomically composed of the `Bit` DS.
-These can be complex, composed of several levels of `area` DS', but ultimately
-the DS must decompose to the `Bit` type.
+data structure that fully decomposes into `Bit`s. Thus, the `area` declaration
+of a `Byte` `Vector` decomposes into `Bytes`, which decomposes into `Bit`s. To
+make such declarations simple, there will be a standard `Nat` type, and the
+`area` declaration will allow data structures to be repeated `Nat` times in
+a contiguous memory block. Finally, `area` types are contiguous in memory.
 
 In order to get predictable performance, the evaluation strategy is strict.
 
