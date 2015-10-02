@@ -1,0 +1,25 @@
+Core
+----
+
+The internal language of PureBit.
+
+Summary
+-------
+
+This is simply System FC with explicit kind equality[1] & Habit kinds[2]
+
+Instructions
+------------
+
+Core is designed with Ott[3].
+
+Footnotes
+---------
+
+[1] http://www.cis.upenn.edu/~eir/papers/2013/fckinds/fckinds.pdf
+
+[2] See 3.3.1
+
+    http://www.cis.upenn.edu/~eir/papers/2013/fckinds/fckinds.pdf
+
+[3] http://www.cl.cam.ac.uk/~pes20/ott/
