@@ -6,76 +6,118 @@ This document gives a rough overview of the design of PureBit.
 Motivation
 ----------
 
-The following are PureBit's primary features:
+The following are PureBit's must-have features:
 * Efficient
+
 * Expressive
-* Safe
+
+* Implicit types (perhaps not full type inference, but definitely some)
+
 * Strongly typed
+
+* Memory safe
+
 * Purely functional
+
 * State handled with monads
-* Low-level data types
+
+* Ad-hoc polymorphism
+
+* Parametric polymorphism
+
+* Low-level
+
 * Eager evaluation
-* Modular with interfaces
 
-I feel that MPJ was on the right track with Habit, and see PureBit as a
-spiritual successor to that project.
+* Modules with interfaces
 
-Feature Set
+* A foreign function interface (this subverts type check guarantees, but it
+  opens up all of the C libraries that a low-level language needs access to)
+
+Design Plan
 -----------
 
-PureBit is essentially a cross between Dependent Haskell & Habit, plus Backpack
-as it's module system.
+The basic compiler design:
+* Parse PureBit source (Source)
 
-The full list:
-* System FC with explicit kind equality as the intermediate language.
+* Rename Source
 
-  This is modified with the inclusion of Habit's kinds.
+* Type check Source
 
-* Syntax & semantics for the source language are based on Habit and Haskell.
+* Desugar Source into an explicitly typed internal language (Core)
 
-  Things like memory update is done via monads.
+* Optimize Core
 
-* Add Dependent Haskell features (e.g. GADTs) to the language, so that they
-  are not just exotic extensions.
+* Code generation (either bytecode for the interpreter or LLVM IR for
+  binary compilation)
 
-* I will use a variant of the Backpack module system to give the language
-  full-blooded separate module development capability.
+Core
+----
 
-Types System
-------------
+Core is the beating heart of PureBit, as Source desugars fully into Core. If
+a feature cannot be expressed in Core, it cannot be expressed in Source.
 
-I initially wanted dependent types for PureBit. Primarily, this was because they
-make it possible to type check what would otherwise be unsafe code, and in so
-doing guarantee safety at compile time. Not only would this allow programs
-to be maximally efficient, they could also allow programs to be proven correct.
+Core is in the family of System F (though potentially system F-Omega, I still 
+haven't decided). The notable difference is that it has 3 different types of
+kinds[1]:
+* Types
 
-However, dependent types have serious disadvantages, as they are significantly
-more complicated.
+* Natural number
 
-Habit's type system, with its multiple kinds, allows PureBit to have all of the
-features that I really care about in dependently typed languages, without the
-costs.
+* Areas
 
-Further, it's trivial to add Habit's kinds to the System FC variant with
-explicit kind equality. While it doesn't provide for all of the features
-a full dependent type system gives, as in Agda, this gives me *a lot* of
-fancy types (e.g. promotable GADTs).
+* (Potentially a 4th kind, namely Labels, but this depends on working out
+  some details in record types first)
 
-Finally, type checking is decideable and performed in linear time, and type
-inference is possible in most cases. As with GHC, the source language is
-primarily implicitly typed (exceptions exist, but they are rare). This
-makes for a much more pleasant coding experience.
+The 1st gives the language polymorphic types, similar to SML & Haskell.
 
-Systems Programming
--------------------
+The 2nd & 3rd allow the language to express low-level types, e.g. bytes.
+This allows the language to function as a safe systems language.
 
-PureBit is designed primarily for low-level systems programming.
+Additionally, per the F-ing modules paper[2], a System F can express a module
+system as powerful as SML's. Moreso, it can express a first-class module
+system[3].
 
-In this regard it borrows *very* heavily from Habit.
+On that basis, I can not only express, but actually integrate a powerful module
+system and type class system[4].
 
-For one, Habit is the only pure, functional, statically & strongly typed,
-strictly evaluated, low-level programming language that I know of.
+Finally, I get all of this with full type checking, and almost full type
+inference!
 
-Not only that, I feel that the solutions developed in Habit are fantastic,
-and revivew them in PureBit gladly.
+Coupled with purity, eager evaluation, and monads to manage state (especially
+a MemMonad, so that IO doesn't turn into a sin bin), I get all of the features
+that I want - though I will have to see if this language can compete against
+Rust in terms of efficiency. Given that its purity allows it to be more
+aggressively optimized, I believe that this is quite feasible, but I'll just
+have to see.
 
+Engineering Plan
+----------------
+
+The idea is to start off designing Core, then build for it a type checker
+(because it's an intermediary language, I would not need a parser for it,
+as it will be receiving an AST directly).
+
+Next, I build an LLVM code generator. The idea there is that the intermediary
+language is worthless if it cannot produce LLVM IR, so I better demonstrate the
+feasibility of this first.
+
+Finally, I design Source, such that every construct desugars into Core. With
+that done, I build a parser, a renamer, a type checker with type inference, and
+a compiler to Core.
+
+This will give me PureBit 0.0.1. The optimizier will simply have to wait for a
+later version number.
+
+Footnotes
+---------
+
+[1] See 3.3.1:
+
+    http://hasp.cs.pdx.edu/habit-report-Nov2010.pdf
+
+[2] http://www.mpi-sws.org/~rossberg/papers/Rossberg,%20Russo,%20Dreyer%20-%20F-ing%20Modules%20[JFP].pdf
+
+[3] http://www.mpi-sws.org/~rossberg/papers/Rossberg%20-%201ML%20--%20Core%20and%20modules%20united.pdf
+
+[4] http://www.cs.cmu.edu/~rwh/papers/mtc/full.pdf
