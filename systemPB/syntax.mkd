@@ -1,0 +1,38 @@
+System PB Syntax
+================
+
+```
+  t ::=                                        terms:
+    x                                          variable
+    l := t                                     label
+    \ x . t                                    abstraction
+    t t                                        application
+    S                                          set
+    T                                          tuple
+
+  S ::=                                        sets:
+    {}                                         empty set
+    { e }                                      set
+    { x | P }                                  class
+    { e }.t                                    selection
+    S + S                                      union
+    S | S                                      intersection
+    S - S                                      complement
+    S * S                                      product
+
+  e ::=                                        elements:
+    t                                          element
+    t, e                                       set of elements
+
+  P ::=                                        predicates:
+    True                                       truth value
+    False                                      truth value
+    ~P                                         negation
+    E x S (P x)                                existence quantifier
+    A x S (P x)                                universal quantifier
+    x : S                                      membership
+
+  T ::=                                        tuples:
+    ()                                         unit
+    (e)                                        tuple
+  ```
