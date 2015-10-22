@@ -16,35 +16,16 @@ Complex Syntax
 
 ```
   S ::=                                        sets:
-    Tpl                                        tuples
     S1 < S2                                    S1 is a subset of S2
     S1 > S2                                    S2 is a subset of S1
     S + S                                      union
     S ^ S                                      intersection
     S - S                                      complement
     S * S                                      product
-    S.e                                        selection
-
-  Tpl ::=                                      tuples:
-    ()                                         unit
-    (e)                                        singleton
-    (e,e)                                      pair
-    (e,Tple)                                   tuple
 ```
 
 Derivations
 -----------
-
-
-Tuple:
-
-```
-  () ::= {}
-  (e) ::= { fst := e }
-  (e1,e2) ::= { fst := e1, snd := e2 }
-  (e1, ..., eN) ::=
-    { fst := e1, snd := { fst := e2, snd := fst := { ..., snd := eN } ... }
-```
 
 Subset:
 
@@ -82,9 +63,4 @@ Subset:
 
 ```
   (*) := /\ a . /\ b . { (x,y) | A x ( A y ( x <- a & y <- b ) ) }
-```
-
-```
-  a.e ::=                                        selection:
-    /\ a . \ e . { x | x <- a & x = e }
 ```
