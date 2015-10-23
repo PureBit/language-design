@@ -34,5 +34,6 @@ System PB Syntax
     Predicate & Predicate                      conjunction
     Predicate | Predicate                      disjunction
     Term = Term                                equality
+    Object <- Set                              membership
     E ( Object <- Set ) Predicate              existential quantifier
 ```

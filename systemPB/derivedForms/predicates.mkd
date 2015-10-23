@@ -6,7 +6,6 @@ Complex Syntax
 
 ```
   Pred ::=                                     predicates:
-    Element <- Set                             membership
     Pred => Pred                               conditional
     Pred <=> Pred                              biconditional
     Set < Set                                  Left is a subset of right
@@ -15,12 +14,6 @@ Complex Syntax
 
 Derivations
 -----------
-
-Membership:
-
-```
-  (<-) := \ x . \ { s } . ~( { y : s = x } = {} )
-```
 
 Conditional:
 
