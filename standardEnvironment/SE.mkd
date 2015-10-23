@@ -5,6 +5,9 @@ This set is present in all implemented sets. It defines types and functions. All
 types are elements of the Type set, and all functions are elements of the
 Function set.
 
+A module is a set that allows for all terms (including syntax sugar and derived
+forms) and that imports the standard environment.
+
 ```
   SE :=
     { Type :=
