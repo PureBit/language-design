@@ -2,37 +2,36 @@ System PB Syntax
 ================
 
 ```
-  t ::=                                        terms:
+  Term ::=
+    Object
+    Lambda
+
+  Object :=
     x                                          variable
-    l := t                                     label
-    \ x . t                                    abstraction
-    t t                                        application
-    S                                          set
-    T                                          tuple
+    x := Term                                  label
+    Set
 
-  S ::=                                        sets:
+  Lambda ::=
+    \ x . Term                                 abstraction
+    \ { x } . x                                set elimination
+    Lambda Term                                application
+
+  Set ::=
     {}                                         empty set
-    { e }                                      set
-    { x | P }                                  class
-    { e }.t                                    selection
-    S + S                                      union
-    S | S                                      intersection
-    S - S                                      complement
-    S * S                                      product
+    { Elements }                               set
+    { Object : Predicate }                     class
+    { Elements }.Object                        selection
 
-  e ::=                                        elements:
-    t                                          element
-    t, e                                       set of elements
+  Elements ::=
+    Object
+    Object, Elements                           set of elements
 
-  P ::=                                        predicates:
-    True                                       truth value
+  Predicate ::=                                predicates:
     False                                      truth value
-    ~P                                         negation
-    E x S (P x)                                existence quantifier
-    A x S (P x)                                universal quantifier
-    x : S                                      membership
-
-  T ::=                                        tuples:
-    ()                                         unit
-    (e)                                        tuple
+    True                                       truth value
+    ~Predicate                                 negation
+    Predicate & Predicate                      conjunction
+    Predicate | Predicate                      disjunction
+    Term = Term                                equality
+    E ( Object <- Set ) Predicate              existential quantifier
   ```
