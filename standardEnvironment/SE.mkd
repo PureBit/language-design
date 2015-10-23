@@ -1,9 +1,9 @@
 Standard Environment
 ====================
 
-This module is present in all implemented modules. It defines types and
-functions. All types are elements of the Type set, and all functions
-are elements of the Function set.
+This set is present in all implemented sets. It defines types and functions. All
+types are elements of the Type set, and all functions are elements of the
+Function set.
 
 ```
   SE :=
@@ -13,7 +13,7 @@ are elements of the Function set.
       , ->   := /\ a . /\ b . ( (p,q) : A (p <- a) (A (q <- b) (p <- Type & q <- type)))
       , Fn   := /\ f . /\ a . /\ b . a <- Type & b <- Type & f < (a -> b)
       }
-    , Function := /\ f . /\ a . /\ b . \ x . ( \ { e } . e ) { z : (Fn f a b)
+    , Function := /\ f . /\ a . /\ b . \ x . ( \ { e } . e ) { z : Fn f a b
                                                                  & x <- a
                                                                  & (y,z) <- f
                                                                  & x = y
