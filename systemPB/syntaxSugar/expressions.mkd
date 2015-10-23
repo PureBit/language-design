@@ -18,7 +18,8 @@ Syntax:
 Definition:
 
 ```
-  match := \ typeA . \ typeB . \ withs . \ x . Function withs typeA typeB x
+  match ::=
+    /\ typeA . /\ typeB . /\ withs . /\ x . Function withs typeA typeB x
 ```
 
 N.B. The difference between a match expression and a simple selection is
@@ -26,4 +27,5 @@ that a selection can be heterogenuous, as it only selects an element from a
 set; a match expression, on the other hand, is a sugared up function, such
 that each function element is a with statement and the match item is a fst
 of one of the function element and the result the snd. That way, match
-expressions preserve type.
+expressions preserve type. Also, as an expression, it can be linked together
+with other expressions so long as type is preserved.
