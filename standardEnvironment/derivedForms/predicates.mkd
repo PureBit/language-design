@@ -12,6 +12,7 @@ Basic Syntax
     P & P                                      conjunction
     P | P                                      disjunction
     t = t                                      equality
+    e <- S                                     membership
 ```
 
 Complex Syntax
@@ -19,7 +20,6 @@ Complex Syntax
 
 ```
   P ::=                                        predicates:
-    e <- S                                     membership
     P => P                                     conditional
     P <=> P                                    biconditional
     S1 < S2                                    S1 is a subset of S2
@@ -28,12 +28,6 @@ Complex Syntax
 
 Derivations
 -----------
-
-Membership:
-
-```
-  (<-) := \ x . /\ s . ~( s.x = {} )
-```
 
 Conditional:
 
