@@ -12,9 +12,9 @@ System PB Syntax
     Set
 
   Lambda ::=
-    \ x . Term                                 abstraction
-    \ x . { x }                                set introduction
-    \ { x } . x                                set elimination
+    /\ x . Term                                abstraction
+    /\ x . { x }                               set introduction
+    /\ { x } . x                               set elimination
     Lambda Term                                application
 
   Set ::=
