@@ -5,7 +5,7 @@ Complex Syntax
 --------------
 
 ```
-  Pred ::=                              predicates:
+  Predicate ::=                         predicates:
     A ( Object <- Set ) Predicate       universal quantifier
     E! ( Object <- Set ) Predicate      uniqueness quantifier
 ```
@@ -17,18 +17,18 @@ Universal quantifier:
 
 ```
   A ( x <- Set ) Predicate ::=
-    A := \ s . \ p . ~( E ( x <- s ) ( E ( y <- s ) ( ~( x = y )
-                                                    & p x <- Predicate
-                                                    & p y <- Predicate
-                                                    & p x = p y
-                                                    ) ) )
+    A := /\ s . /\ p . ~( E ( x <- s ) ( E ( y <- s ) ( ~( x = y )
+                                                      & p x <- Predicate
+                                                      & p y <- Predicate
+                                                      & p x = p y
+                                                      ) ) )
 ```
 
 Uniqueness quantifier:
 
 ```
   E! ( x <- Set ) Predicate ::=
-    (E!) := \ s . \ p . E ( x <- s ) ( A ( y <- s ) ( p y <- Predicate
-                                                    & p y <=> y = x
-                                                    ) )
+    (E!) := /\ s . /\ p . E ( x <- s ) ( A ( y <- s ) ( p y <- Predicate
+                                                      & p y <=> y = x
+                                                      ) )
 ```
