@@ -1,0 +1,61 @@
+Predicate Derived Forms
+=======================
+
+Basic Syntax
+------------
+
+```
+  P ::=                                        predicates:
+    False                                      truth value
+    True                                       truth value
+    ~P                                         negation
+    P & P                                      conjunction
+    P | P                                      disjunction
+    t = t                                      equality
+    e <- S                                     membership
+```
+
+Complex Syntax
+--------------
+
+```
+  P ::=                                        predicates:
+    P => P                                     conditional
+    P <=> P                                    biconditional
+    E e P                                      existential quantifier
+    E! e P                                     uniqueness quantifier
+    A e P                                      universal quantifier
+```
+
+Derivations
+-----------
+
+Conditional:
+
+```
+  (=>) := \ p . \ q . p <- P & q <- P & ~( p & ~q )
+```
+
+Biconditional:
+
+```
+  (<=>) := \ p . \ q . p <- P & q <- P & p => q & q => p
+```
+
+Existential identifier:
+
+```
+  E := \ x . \ p . x <- e & p <- P & p x
+```
+
+Uniqueness identifier:
+
+```
+  E! := \ x . \ p . E x p & ( { y | p & ~( y = x ) } = {} )
+```
+
+Universal quantifier:
+
+```
+  A := \ x . \ p . E x p & ( { y | E y p & ~( y = x ) } = {} )
+```
