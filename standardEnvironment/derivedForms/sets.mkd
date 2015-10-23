@@ -9,6 +9,7 @@ Basic Syntax
     {}                                         empty set
     { s }                                      set
     { x | P }                                  class
+    S.e                                        selection
 ```
 
 Complex Syntax
