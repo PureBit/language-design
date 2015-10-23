@@ -1,0 +1,53 @@
+Predicates Syntax Sugar
+=======================
+
+Basic Syntax
+------------
+
+```
+  P ::=                                        predicates:
+    False                                      truth value
+    True                                       truth value
+    ~P                                         negation
+    P & P                                      conjunction
+    P | P                                      disjunction
+    t = t                                      equality
+    e <- S                                     membership
+  ```
+
+Complex Syntax
+--------------
+
+
+```
+  P ::=                                        predicates:
+    E ( e <- S ) P                             existential quantifier
+    E! ( e <- S ) P                            uniqueness quantifier
+    A  ( e <- S ) P                            universal quantifier
+```
+
+Definitions
+-----------
+
+Existential quantifier:
+
+```
+  E ( e <- S ) P ::=
+    E := \ x . /\ s . \ p . x <- s & p x <- P
+```
+
+Uniqueness identifier:
+
+```
+  E! ( e <- S ) P ::=
+    (E!) := \ x . /\ s . \ p . E ( x <- s ) p &
+                               ( { y | ~( x = y ) & E ( y <- s ) p } = {} )
+```
+
+Universal quantifier:
+
+```
+  A ( e <- S ) P ::=
+    A := \ x . /\ s . \ p . E ( x <- s ) p &
+                            ~( E ( x <- s ) ~p )
+```
