@@ -5,9 +5,9 @@ Complex Syntax
 --------------
 
 ```
-  Pred ::=                                     predicates:
-    Pred => Pred                               conditional
-    Pred <=> Pred                              biconditional
+  Predicate ::=                                predicates:
+    Predicate => Predicate                     conditional
+    Predicate <=> Predicate                    biconditional
     Set < Set                                  Left is a subset of right
     Set > Set                                  Right is a subset of left
 ```
@@ -18,31 +18,23 @@ Derivations
 Conditional:
 
 ```
-  (=>) := \ p . \ q . p <- P & q <- P & ~( p & ~q )
+  (=>) := /\ p . /\ q . p <- Predicate & q <- Predicate & ~( p & ~q )
 ```
 
 Biconditional:
 
 ```
-  (<=>) := \ p . \ q . p <- P & q <- P & p => q & q => p
+  (<=>) := /\ p . /\ q . p <- Predicate & q <- Predicate & p => q & q => p
 ```
 
 Subset:
 
 ```
-  (<) := /\ a . /\ b . ~( { x | A x ( E y ( x <- a
-                                          & y <- b
-                                          & x = y
-                                          ) )
-                          } = {} )
+  (<) := /\ a . /\ b . ~( { x : A ( x <- a) ( E ( y <- b) ( x = y ) ) } = {} )
                       | ( a = {} )
 ```
 
 ```
-  (>) := /\ a . /\ b . ~( { x | A y ( E x ( x <- a
-                                          & y <- b
-                                          & x = y
-                                          ) )
-                          } = {} )
-                      | ( a = {} )
+  (>) := /\ a . /\ b . ~( { x : A ( x <- b) ( E ( y <- a) ( x = y ) ) } = {} )
+                      | ( b = {} )
 ```
