@@ -17,8 +17,6 @@ Complex Syntax
 
 ```
   S ::=                                        sets:
-    S1 < S2                                    S1 is a subset of S2
-    S1 > S2                                    S2 is a subset of S1
     S + S                                      union
     S ^ S                                      intersection
     S - S                                      complement
@@ -27,26 +25,6 @@ Complex Syntax
 
 Derivations
 -----------
-
-Subset:
-
-```
-  (<) := /\ a . /\ b . ~( { x | A x ( E y ( x <- a
-                                          & y <- b
-                                          & x = y
-                                          ) )
-                          } = {} )
-                      | ( a = {} )
-```
-
-```
-  (>) := /\ a . /\ b . ~( { x | A y ( E x ( x <- a
-                                          & y <- b
-                                          & x = y
-                                          ) )
-                          } = {} )
-                      | ( a = {} )
-```
 
 ```
   (+) := /\ a . /\ b . { x | A x ( x <- a | x <- b ) }
