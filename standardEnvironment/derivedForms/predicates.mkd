@@ -12,7 +12,6 @@ Basic Syntax
     P & P                                      conjunction
     P | P                                      disjunction
     t = t                                      equality
-    e <- S                                     membership
 ```
 
 Complex Syntax
@@ -20,15 +19,21 @@ Complex Syntax
 
 ```
   P ::=                                        predicates:
+    e <- S                                     membership
     P => P                                     conditional
     P <=> P                                    biconditional
-    E e P                                      existential quantifier
-    E! e P                                     uniqueness quantifier
-    A e P                                      universal quantifier
+    S1 < S2                                    S1 is a subset of S2
+    S1 > S2                                    S2 is a subset of S1
 ```
 
 Derivations
 -----------
+
+Membership:
+
+```
+  (<-) := \ x . /\ s . ~( s.x = {} )
+```
 
 Conditional:
 
@@ -42,20 +47,22 @@ Biconditional:
   (<=>) := \ p . \ q . p <- P & q <- P & p => q & q => p
 ```
 
-Existential identifier:
+Subset:
 
 ```
-  E := \ x . \ p . x <- e & p <- P & p x
+  (<) := /\ a . /\ b . ~( { x | A x ( E y ( x <- a
+                                          & y <- b
+                                          & x = y
+                                          ) )
+                          } = {} )
+                      | ( a = {} )
 ```
 
-Uniqueness identifier:
-
 ```
-  E! := \ x . \ p . E x p & ( { y | p & ~( y = x ) } = {} )
-```
-
-Universal quantifier:
-
-```
-  A := \ x . \ p . E x p & ( { y | E y p & ~( y = x ) } = {} )
+  (>) := /\ a . /\ b . ~( { x | A y ( E x ( x <- a
+                                          & y <- b
+                                          & x = y
+                                          ) )
+                          } = {} )
+                      | ( a = {} )
 ```
