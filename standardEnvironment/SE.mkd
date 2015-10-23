@@ -12,14 +12,16 @@ forms) and that imports the standard environment.
   SE :=
     { Type :=
       { Unit := ( (), ( Unit ) )
-      , *    := /\ t . A ( x <- t ) ( x <- Unit )
-      , ->   := /\ a . /\ b . ( (p,q) : A (p <- a) (A (q <- b) (p <- Type & q <- type)))
-      , Fn   := /\ f . /\ a . /\ b . a <- Type & b <- Type & f < (a -> b)
+      , #    := /\ t . A ( x <- t ) ( x <- Unit )
+      , *    :=
+        /\ a . /\ b . ( (p,q) : A ( p <- a ) ( A ( q <- b ) ( p <- Type
+                                                            & q <- Type ) ) )
+      , ->   := /\ a . /\ b . /\ f . a <- Type & b <- Type & f < (a * b)
       }
-    , Function := /\ f . /\ a . /\ b . \ x . ( \ { e } . e ) { z : Fn f a b
-                                                                 & x <- a
-                                                                 & (y,z) <- f
-                                                                 & x = y
-                                                             }
+    , Function := /\ a . /\ b . /\ f . /\ x . ( /\ { e } . e ) { z : -> a b f
+                                                                   & x <- a
+                                                                   & (y,z) <- f
+                                                                   & x = y
+                                                               }
     }
 ```
