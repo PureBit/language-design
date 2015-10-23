@@ -13,6 +13,7 @@ System PB Syntax
 
   Lambda ::=
     \ x . Term                                 abstraction
+    \ x . { x }                                set introduction
     \ { x } . x                                set elimination
     Lambda Term                                application
 
@@ -34,4 +35,4 @@ System PB Syntax
     Predicate | Predicate                      disjunction
     Term = Term                                equality
     E ( Object <- Set ) Predicate              existential quantifier
-  ```
+```
