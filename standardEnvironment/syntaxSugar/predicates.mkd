@@ -12,7 +12,6 @@ Basic Syntax
     P & P                                      conjunction
     P | P                                      disjunction
     t = t                                      equality
-    e <- S                                     membership
   ```
 
 Complex Syntax
