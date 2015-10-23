@@ -1,19 +1,25 @@
 Sets Syntax Sugar
 =================
 
-Tuples:
+Tuples
+------
 
+Syntax:
 ```
   Tpl ::=                                      tuples:
     ()                                         unit
     (e)                                        singleton
     (e,e)                                      pair
-    (e,Tple)                                   tuple
+    (e,Tpl)                                    tuple
+    Tpl.e
 ```
 
-Selection:
-
+Definition:
 ```
-  S.e ::=                                      selection:
-    /\ a . \ x . { y | y <- a & y = x }
+  () ::= {}
+  (e) ::= { fst := e }
+  (e1,e2) ::= { fst := e1, snd := e2 }
+  (e1, ..., eN) ::=
+    { fst := e1, snd := { fst := e2, snd := fst := { ..., snd := eN } ... } }
+  Tpl.e ::= { ... }.e
 ```
