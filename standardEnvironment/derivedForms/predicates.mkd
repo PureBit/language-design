@@ -1,33 +1,26 @@
 Predicate Derived Forms
 =======================
 
-Basic Syntax
-------------
-
-```
-  P ::=                                        predicates:
-    False                                      truth value
-    True                                       truth value
-    ~P                                         negation
-    P & P                                      conjunction
-    P | P                                      disjunction
-    t = t                                      equality
-    e <- S                                     membership
-```
-
 Complex Syntax
 --------------
 
 ```
-  P ::=                                        predicates:
-    P => P                                     conditional
-    P <=> P                                    biconditional
-    S1 < S2                                    S1 is a subset of S2
-    S1 > S2                                    S2 is a subset of S1
+  Pred ::=                                     predicates:
+    Element <- Set                             membership
+    Pred => Pred                               conditional
+    Pred <=> Pred                              biconditional
+    Set < Set                                  Left is a subset of right
+    Set > Set                                  Right is a subset of left
 ```
 
 Derivations
 -----------
+
+Membership:
+
+```
+  (<-) := \ x . \ { s } . ~( { y : s = x } = {} )
+```
 
 Conditional:
 
