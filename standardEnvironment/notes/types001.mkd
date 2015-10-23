@@ -1,0 +1,167 @@
+Types
+-----
+
+Nullary
+-------
+
+Definition:
+
+```
+  Bit := ( Off := ()
+         , On := (())
+         )
+```
+
+Type check:
+
+```
+  # Bit = ( /\ t . A ( x <- t ) ( x <- Unit ) ) ( Off := (), On := (()) )
+        = A ( x <- ( Off := (), On := (()) ) ) ( x <- Unit )
+        = True (*) Type checks!
+```
+
+Unary
+-----
+
+```
+  List := /\ a .
+    ( Null := ()
+    , a -> List a
+    }
+        = /\ a .
+    { Null := ()
+    , (->) a (List a)
+    }
+        = /\ a .
+    { Null := ()
+    , (/\ b . /\ c . ( (p,q) : A ( p <- b ) ( A ( q <- c ) ( p <- Type
+                                                           & q <- Type
+                                                           ) ) )
+      ) a (List a)
+    }
+        = /\ a .
+    { Null := ()
+    , ( (p,q) : A ( p <- a ) ( A ( q <- List a ) ( p <- Type
+                                                 & q <- Type
+                                                 ) ) )
+    }
+```
+
+```
+  List Bool = ( /\ a .
+    { Null := ()
+    , ( (p,q) : A ( p <- a ) ( A ( q <- List a ) ( p <- Type
+                                                 & q <- Type
+                                                 ) ) )
+    } ) Bool
+            =
+    { Null := ()
+    , ( (p,q) : A ( p <- Bool ) ( A ( q <- List Bool ) ( p <- Type
+                                                       & q <- Type
+                                                       ) ) )
+    }
+```
+
+Binary
+------
+
+```
+  Pair := /\ a . /\ b . a -> b
+        = /\ a . /\ b . (->) a b
+        = /\ a . /\ b .
+            ( /\ c . /\ d . ( (p,q) : A ( p <- c ) ( A ( q <- d ) ( p <- Type
+                                                                  & q <- Type
+                                                                  ) ) ) ) c d
+        = /\ a . /\ b . ( (p,q) : A ( p <- a ) ( A ( q <- b ) ( p <- Type
+                                                            & q <- Type
+                                                            ) ) )
+```
+
+```
+  Pair Bool Bool = ( /\ a . /\ b . ( (p,q) : A ( p <- a ) ( A ( q <- b ) ( p <- Type
+                                                                       & q <- Type
+                                                                       ) ) ) ) Bool Bool
+                 = ( (p,q) : A ( p <- Bool ) ( A ( q <- Bool ) ( p <- Type
+                                                               & q <- Type
+                                                               ) ) )
+                 = ( (True, True)
+                   , (True, False)
+                   , (False, True)
+                   , (False, False)
+                   ) (*) Checks out!
+```
+
+Function
+--------
+
+```
+  AND := { ((True, True), True)
+         , ((True, False), False)
+         , ((False, True), False)
+         , ((False, False), False)
+         }
+
+  and := \ a . \ b . Function AND
+                              (Bool -> Bool)
+                              Bool
+                              (a,b)
+       = \ a . \ b . ( /\ f . /\ t1 . /\ t2 . \ x . ( \ { e } . e )
+                                                      { n : Fn f t1 t2
+                                                          & x <- t1
+                                                          & (m,n) <- f
+                                                          & x = m
+                                                      }
+                     ) AND
+                       (Bool -> Bool)
+                       Bool
+                       (a,b)
+       = \ a . \ b . ( \ { e } . e ) { n : Fn AND (Bool -> Bool) Bool
+                                         & (a,b) <- (Bool -> Bool)
+                                         & (m,n) <- AND
+                                         & (a,b) = m
+                                     }
+```
+
+```
+  and 'a' 3 = ( \ a . \ b . ( \ { e } . e ) { n : Fn AND (Bool -> Bool) Bool
+                                                & (a,b) <- (Bool -> Bool)
+                                                & (m,n) <- AND
+                                                & (a,b) = m
+                                            }
+              ) 'a' 3
+            = ( \ { e } . e ) { n : Fn AND (Bool -> Bool) Bool  (*) True
+                                  & ('a', 3) <- (Bool -> Bool)  (*) False
+                                  & (m,n) <- AND
+                                  & ('a', 3) = m
+                              }
+            = {} (*) We have type checking!
+```
+
+```
+  and True False = ( \ a . \ b . ( \ { e } . e ) { n : Fn AND (Bool -> Bool) Bool
+                                                     & (a,b) <- (Bool -> Bool)
+                                                     & (m,n) <- AND
+                                                     & (a,b) = m
+                                                 }
+                   ) True False
+            = ( \ { e } . e ) { n : Fn AND (Bool -> Bool) Bool       (*) True
+                                  & (True, False) <- (Bool -> Bool)  (*) True
+                                  & (m,n) <- AND                     (*) True
+                                  & (True, False) = m                (*) True
+                              }
+            = False (*) We have output!
+```
+
+```
+  and True = ( \ a . \ b . ( \ { e } . e ) { n : Fn AND (Bool -> Bool) Bool
+                                               & (a,b) <- (Bool -> Bool)
+                                               & (m,n) <- AND
+                                               & (a,b) = m
+                                           }
+             ) True
+           = \ b . ( \ { e } . e ) { n : Fn AND (Bool -> Bool) Bool          (*) True
+                                               & (True, b) <- (Bool -> Bool) (*) ?
+                                               & (m,n) <- AND                (*) ?
+                                               & (True, b) = m               (*) ?
+                                           } (*) We have currying!
+```
