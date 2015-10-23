@@ -8,10 +8,10 @@ Functions
          , ((False, False), False)
          }
 
-  and := \ a . \ b . Function AND
-                              (Bool * Bool)
-                              Bool
-                              (a,b)
+  and := /\ a . /\ b . Function AND
+                                (Bool * Bool)
+                                Bool
+                                (a,b)
        = \ a . \ b . ( /\ f . /\ t1 . /\ t2 . \ x . ( \ { e } . e )
                                                       { n : -> f t1 t2
                                                           & x <- t1
