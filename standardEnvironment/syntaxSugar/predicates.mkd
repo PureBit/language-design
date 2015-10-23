@@ -5,34 +5,30 @@ Complex Syntax
 --------------
 
 ```
-  Pred ::=                                     predicates:
-    E ( Elements <- Set ) Pred                 existential quantifier
-    E! ( Elements <- Set ) Pred                uniqueness quantifier
-    A ( Elements <- Set ) Pred                universal quantifier
+  Pred ::=                              predicates:
+    A ( Object <- Set ) Predicate       universal quantifier
+    E! ( Object <- Set ) Predicate      uniqueness quantifier
 ```
 
 Definitions
 -----------
 
-Existential quantifier:
-
-```
-  E ( Elements <- Set ) Pred ::=
-    E := \ x . /\ s . \ p . x <- s & p x <- P
-```
-
-Uniqueness identifier:
-
-```
-  E! ( Elements <- Set ) Pred ::=
-    (E!) := \ x . /\ s . \ p . E ( x <- s ) p &
-                               ( { y | ~( x = y ) & E ( y <- s ) p } = {} )
-```
-
 Universal quantifier:
 
 ```
-  A ( Elements <- Set ) Pred ::=
-    A := \ x . /\ s . \ p . E ( x <- s ) p &
-                            ~( E ( x <- s ) ~p )
+  A ( x <- Set ) Predicate ::=
+    A := \ s . \ p . ~( E ( x <- s ) ( E ( y <- s ) ( ~( x = y )
+                                                    & p x <- Predicate
+                                                    & p y <- Predicate
+                                                    & p x = p y
+                                                    ) ) )
+```
+
+Uniqueness quantifier:
+
+```
+  E! ( x <- Set ) Predicate ::=
+    (E!) := \ s . \ p . E ( x <- s ) ( A ( y <- s ) ( p y <- Predicate
+                                                    & p y <=> y = x
+                                                    ) )
 ```
