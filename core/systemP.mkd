@@ -1,0 +1,75 @@
+System F-OGL
+============
+
+System F-OGL = System F-Omega + Groups and Levels
+
+This is the higher-order polymorphic lambda calculus that PureBit is built on.
+
+Notes
+-----
+
+First of all, I will redo this with Ott soon.
+
+Second, while System F-OGL seems like it adds a great deal of complexity,
+Core will only use a small subset of groups (abstract data [adat], bit data
+[bdat], natural [nat], and label [lab]) and levels (concrete and abstract).
+Simplified like this, it will be trivial to expand Rossberg's F-ing modules
+and Dreyer's modular type classes. Also, the hope is to utilize Cayenne's
+
+Syntax
+------
+
+```
+t :=                                        (*) terms:
+      x                                     (*) variable
+      \ x:T . t                             (*) abstraction
+      t t                                   (*) application
+      \ X:G . t                             (*) type abstraction
+      t [T]                                 (*) type application
+      \ G:L . t                             (*) group abstraction
+      T [G]                                 (*) group application
+      \ L:K . t                             (*) group abstraction
+      G [L]                                 (*) group application
+
+v :=                                        (*) values:
+      \ x:T . t                             (*) abstraction value
+      \ X:G . t                             (*) type abstraction value
+      \ _X:L . t                            (*) group abstraction value
+      \ X_:K . t                            (*) level abstraction value
+
+T :=                                        (*) types:
+      X                                     (*) type variable
+      T -> T                                (*) types of functions
+      forall X:G . T                        (*) universal type
+      \ X:G . T                             (*) operator abstraction
+      T T                                   (*) operator application
+
+G :=                                        (*) groups:
+      _X                                    (*) group variable
+      G -> G                                (*) groups of functions
+      forall _X:L . G                       (*) universal group
+      \ _X:L . G                            (*) operator abstraction
+      G G                                   (*) operator application
+
+L :=                                        (*) levels:
+      X_                                    (*) level variable
+      G -> G                                (*) levels of functions
+      forall _X:K . G                       (*) universal level
+      \ _X:K . G                            (*) operator abstraction
+      G G                                   (*) operator application
+
+Y :=                                        (*) Contexts:
+      (* empty *)                           (*) empty context
+      Y, x:T                                (*) term variable binding
+      Y, X:G                                (*) type variable binding
+      Y, _X:K                               (*) group variable binding
+
+K :=                                        (*) Contexts:
+      *                                     (*) kind of proper groups
+      K => K                                (*) kind of proper operators
+```
+
+Evaluation
+----------
+
+```
