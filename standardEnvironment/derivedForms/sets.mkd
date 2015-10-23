@@ -1,16 +1,6 @@
 Sets Derived Forms
 ==================
 
-Basic Syntax
-------------
-
-```
-  S ::=                                        sets:
-    {}                                         empty set
-    { s }                                      set
-    { x | P }                                  class
-```
-
 Complex Syntax
 --------------
 
@@ -26,19 +16,17 @@ Derivations
 -----------
 
 ```
-  (+) := /\ a . /\ b . { x | A x ( x <- a | x <- b ) }
+  (+) := \ a . \ b . { z : A x ( x <- a ) ( A y ( y <- b ) ( z = x | z = y ) ) }
 ```
 
 ```
-  (^) := /\ a . /\ b . { x | A x ( ( x <- a | x <- b )
-                                 & ~( x <- a & ~( x <- b))
-                                 & ~( x <- b & ~( x <- a))) }
+  (^) := \ a . \ b . { z : A x ( x <- a ) ( A y ( y <- b ) ( ~( z = x & ~( z = y ) ) ) ) }
 ```
 
 ```
-  (-) := /\ a . /\ b . { x | A x ( x <- a & ~( x <- b ) ) }
+  (-) := \ a . \ b . { z : A x ( x <- a ) ( A y ( y <- b ) ( z = x & ~( z = y ) ) ) }
 ```
 
 ```
-  (*) := /\ a . /\ b . { (x,y) | A x ( A y ( x <- a & y <- b ) ) }
+  (*) := \ a . \ b . { (p,q) : A x ( x <- a ) ( A y ( y <- b ) ( p = x & q = y ) ) }
 ```
