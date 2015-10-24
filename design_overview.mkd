@@ -29,7 +29,7 @@ The following are PureBit's must-have features:
 
 * Eager evaluation
 
-* Modules with interfaces
+* First class modules with interfaces
 
 * A foreign function interface (this subverts type check guarantees, but it
   opens up all of the C libraries that a low-level language needs access to)
@@ -57,40 +57,6 @@ Core
 Core is the beating heart of PureBit, as Source desugars fully into Core. If
 a feature cannot be expressed in Core, it cannot be expressed in Source.
 
-Core is in the family of System F (though potentially system F-Omega, I still 
-haven't decided). The notable difference is that it has 3 different types of
-kinds[1]:
-* Types
-
-* Natural number
-
-* Areas
-
-* (Potentially a 4th kind, namely Labels, but this depends on working out
-  some details in record types first)
-
-The 1st gives the language polymorphic types, similar to SML & Haskell.
-
-The 2nd & 3rd allow the language to express low-level types, e.g. bytes.
-This allows the language to function as a safe systems language.
-
-Additionally, per the F-ing modules paper[2], a System F can express a module
-system as powerful as SML's. Moreso, it can express a first-class module
-system[3].
-
-On that basis, I can not only express, but actually integrate a powerful module
-system and type class system[4].
-
-Finally, I get all of this with full type checking, and almost full type
-inference!
-
-Coupled with purity, eager evaluation, and monads to manage state (especially
-a MemMonad, so that IO doesn't turn into a sin bin), I get all of the features
-that I want - though I will have to see if this language can compete against
-Rust in terms of efficiency. Given that its purity allows it to be more
-aggressively optimized, I believe that this is quite feasible, but I'll just
-have to see.
-
 Engineering Plan
 ----------------
 
@@ -98,26 +64,11 @@ The idea is to start off designing Core, then build for it a type checker
 (because it's an intermediary language, I would not need a parser for it,
 as it will be receiving an AST directly).
 
-Next, I build an LLVM code generator. The idea there is that the intermediary
-language is worthless if it cannot produce LLVM IR, so I better demonstrate the
-feasibility of this first.
-
-Finally, I design Source, such that every construct desugars into Core. With
+Next, I design Source, such that every construct desugars into Core. With
 that done, I build a parser, a renamer, a type checker with type inference, and
 a compiler to Core.
 
-This will give me PureBit 0.0.1. The optimizier will simply have to wait for a
-later version number.
+Finally, I build an LLVM code generator to make Core useful.
 
-Footnotes
----------
-
-[1] See 3.3.1:
-
-    http://hasp.cs.pdx.edu/habit-report-Nov2010.pdf
-
-[2] http://www.mpi-sws.org/~rossberg/papers/Rossberg,%20Russo,%20Dreyer%20-%20F-ing%20Modules%20[JFP].pdf
-
-[3] http://www.mpi-sws.org/~rossberg/papers/Rossberg%20-%201ML%20--%20Core%20and%20modules%20united.pdf
-
-[4] http://www.cs.cmu.edu/~rwh/papers/mtc/full.pdf
+This will give me PureBit 0.0.1. Using it, I then self-host, build an optimizer,
+and a linter.
