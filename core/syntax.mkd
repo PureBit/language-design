@@ -10,7 +10,6 @@ All productions in Core must adhere to the following production rules:
   Term ::=
     Object
     Lambda
-    Fail
 
   Object :=
     x                                          variable
@@ -43,9 +42,6 @@ All productions in Core must adhere to the following production rules:
     Term = Term                                equality
     Object <- Set                              membership
     E ( Object <- Set ) Predicate              existential quantifier
-
-  Fail ::=
-    error Message                             Terminate & print error message
 ```
 
 Complex Syntax
@@ -73,34 +69,5 @@ Complex Syntax
   ( Object, Tpl ) ::=
     { fst := Object
     , snd := Tpl
-    }
-```
-
-Standard Environment
---------------------
-
-All valid Core must belong to one of the members of SE.
-
-```
-  SE :=
-    { Type :=
-      { Unit := ( (), (Unit) )
-      , #    := /\ t . A ( x <- t ) ( x <- Unit )
-      , *    :=
-        /\ a . /\ b . ( (p,q) : A ( p <- a ) ( A ( q <- b ) ( p <- Type
-                                                            & q <- Type ) ) )
-      , ->   := /\ a . /\ b . /\ f . a <- Type & b <- Type & f < (a * b)
-      }
-    , Function := /\ a . /\ b . /\ f . /\ x . ( /\ { e } . e ) { z : -> a b f
-                                                                   & x <- a
-                                                                   & (y,z) <- f
-                                                                   & x = y
-                                                               }
-    , Program := /\ typeA . /\ typeB . /\ fn . /\ x .
-      { main := Function typeA typeB fn x
-      }.main
-    , Library := /\ f .
-      { x : A ( x <- f ) ~( x = main )
-      }
     }
 ```
