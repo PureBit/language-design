@@ -1,0 +1,33 @@
+Data
+----
+
+PureBit is a low-level language, and the data types must reflect this fact.
+
+As such, users can utilize unboxed Bitdata types:
+
+```
+  Types :=
+    { Nat := /\ f . /\ x .
+      { 0  := x
+      , ++ := f (Nat f x)
+      , +  := Nat f (Nat f x)
+      , *  := Nat (Nat f) x
+      , ^  := (Nat Nat) f x
+      , -- := Nat (/\g . /\h . h (g f)) (/\u . x) (/\u . u)
+      , -  := Nat (Nat.--)
+      }
+    , Bit :=
+      { Off := ()
+      , On := (())
+      }
+    , Bitdata := Nat ( /\ x . (Bit, x) ) ()
+    }
+    +
+    { Unit := ( (), ( Unit ) )
+    , #    := /\ t . A ( x <- t ) ( x <- Unit )
+    , *    :=
+      /\ a . /\ b . ( (p,q) : A ( p <- a ) ( A ( q <- b ) ( p <- Type
+                                                          & q <- Type ) ) )
+    , ->   := /\ a . /\ b . /\ f . a <- Type & b <- Type & f < (a * b)
+    }
+```
