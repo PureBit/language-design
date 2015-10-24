@@ -44,7 +44,7 @@ All productions in Core must adhere to the following production rules:
     E ( Object <- Set ) Predicate              existential quantifier
 ```
 
-Complex Syntax
+Derived Syntax
 --------------
 
 ```
