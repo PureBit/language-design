@@ -1,0 +1,106 @@
+Core Syntax
+===========
+
+Basic Syntax
+------------
+
+All productions in Core must adhere to the following production rules:
+
+```
+  Term ::=
+    Object
+    Lambda
+    Fail
+
+  Object :=
+    x                                          variable
+    x := Term                                  label
+    Set
+
+  Lambda ::=
+    /\ x . Term                                abstraction
+    /\ x . { x }                               set introduction
+    /\ { x } . x                               set elimination
+    Lambda Term                                application
+
+  Set ::=
+    {}                                         empty set
+    { Elements }                               inhabited set
+    { Object : Predicate }                     class
+    { Elements }.Object                        selection
+    Tpl                                        tuple
+
+  Elements ::=
+    Object
+    Object, Elements                           set of elements
+
+  Predicate ::=                                predicates:
+    False                                      truth value
+    True                                       truth value
+    ~Predicate                                 negation
+    Predicate & Predicate                      conjunction
+    Predicate | Predicate                      disjunction
+    Term = Term                                equality
+    Object <- Set                              membership
+    E ( Object <- Set ) Predicate              existential quantifier
+
+  Fail ::=
+    error Message                             Terminate & print error message
+```
+
+Complex Syntax
+--------------
+
+```
+  Tpl ::=                                      tuples:
+    ()                                         unit
+    ( Object )                                 singleton
+    ( Object, Object )                         pair
+    ( Object, Tpl )                            tuple
+    Tpl.Object                                 selection
+
+  () ::=
+    {}
+
+  ( Object ) ::=
+    { Object }
+
+  ( Object, Object ) ::=
+    { fst := Object
+    , snd := Object
+    }
+
+  ( Object, Tpl ) ::=
+    { fst := Object
+    , snd := Tpl
+    }
+```
+
+Standard Environment
+--------------------
+
+All valid Core must belong to one of the members of SE.
+
+```
+  SE :=
+    { Type :=
+      { Unit := ( (), (Unit) )
+      , #    := /\ t . A ( x <- t ) ( x <- Unit )
+      , *    :=
+        /\ a . /\ b . ( (p,q) : A ( p <- a ) ( A ( q <- b ) ( p <- Type
+                                                            & q <- Type ) ) )
+      , ->   := /\ a . /\ b . /\ f . a <- Type & b <- Type & f < (a * b)
+      }
+    , Function := /\ a . /\ b . /\ f . /\ x . ( /\ { e } . e ) { z : -> a b f
+                                                                   & x <- a
+                                                                   & (y,z) <- f
+                                                                   & x = y
+                                                               }
+    , Program := /\ typeA . /\ typeB . /\ fn . /\ x .
+      { main := Function typeA typeB fn x
+      }.main
+    , Library := /\ f .
+      { x : A ( x <- f ) ~( x = main )
+      }
+    }
+```
