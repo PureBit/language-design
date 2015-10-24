@@ -23,5 +23,11 @@ forms) and that imports the standard environment.
                                                                    & (y,z) <- f
                                                                    & x = y
                                                                }
+    , Program := /\ typeA . /\ typeB . /\ fn . /\ x .
+      { main := Function typeA typeB fn x
+      }.main
+    , Library := /\ f .
+      { x : A ( x <- f ) ~( x = main )
+      }
     }
 ```
