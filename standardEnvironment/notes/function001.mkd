@@ -8,61 +8,68 @@ Functions
          , ((False, False), False)
          }
 
-  and := /\ a . /\ b . Function AND
-                                (Bool * Bool)
+  and := /\ a . /\ b . Function (Bool * Bool)
                                 Bool
+                                AND
                                 (a,b)
-       = \ a . \ b . ( /\ f . /\ t1 . /\ t2 . \ x . ( \ { e } . e )
-                                                      { n : -> f t1 t2
-                                                          & x <- t1
-                                                          & (m,n) <- f
-                                                          & x = m
-                                                      }
-                     ) AND
-                       (Bool * Bool)
-                       Bool
-                       (a,b)
-       = \ a . \ b . ( \ { e } . e ) { n : -> AND (Bool * Bool) Bool
-                                         & (a,b) <- (Bool * Bool)
-                                         & (m,n) <- AND
-                                         & (a,b) = m
-                                     }
+       = /\ a . /\ b . ( /\ t1 . /\ t2 . /\ f . /\ x .
+            ( /\ { e } . e )
+                 { n : -> t1 t2 f
+                     & x <- t1
+                     & (m,n) <- f
+                     & x = m
+                 }
+                       ) 
+                         (Bool * Bool)
+                         Bool
+                         AND
+                         (a,b)
+       = /\ a . /\ b . ( /\ { e } . e ) { n : -> (Bool * Bool) Bool AND
+                                            & (a,b) <- (Bool * Bool)
+                                            & (m,n) <- AND
+                                            & (a,b) = m
+                                        }
+```
 
-  and 'a' 3 = (\ a . \ b . ( \ { e } . e ) { n : -> AND (Bool * Bool) Bool
-                                               & (a,b) <- (Bool * Bool)
-                                               & (m,n) <- AND
-                                               & (a,b) = m
-                                           }) 'a' 3
-            = ( \ { e } . e ) { n : -> AND (Bool * Bool) Bool (*) True
-                                  & ('a', 3) <- (Bool * Bool) (*) False
-                                  & (m,n) <- AND
-                                  & ('a', 3) = m
-                              }
-            = ( \ { e } . e ) {}
-            = {}                                              (*) we have type checking!
+```
+  and 'a' 3 = ( /\ a . /\ b . ( /\ { e } . e ) { n : -> (Bool * Bool) Bool AND
+                                                   & (a,b) <- (Bool * Bool)
+                                                   & (m,n) <- AND
+                                                   & (a,b) = m
+                                           } ) 'a' 3
+            = ( /\ { e } . e ) { n : -> (Bool * Bool) Bool AND (*) True
+                                   & ('a', 3) <- (Bool * Bool) (*) False
+                                   & (m,n) <- AND
+                                   & ('a', 3) = m
+                               }
+            = ( /\ { e } . e ) {}
+            = {}                                               (*) we have type checking!
+```
 
-  and True False = (\ a . \ b . ( \ { e } . e ) { n : -> AND (Bool * Bool) Bool
-                                                    & (a,b) <- (Bool * Bool)
-                                                    & (m,n) <- AND
-                                                    & (a,b) = m
+```
+  and True False = ( /\ a . /\ b . ( /\ { e } . e ) { n : -> (Bool * Bool) Bool AND
+                                                        & (a,b) <- (Bool * Bool)
+                                                        & (m,n) <- AND
+                                                        & (a,b) = m
                                                 }) True False
-                 = ( \ { e } . e ) { n : -> AND (Bool * Bool) Bool        (*) True
+                 = ( \ { e } . e ) { n : -> (Bool * Bool) Bool AND        (*) True
                                        & (True, False) <- (Bool * Bool)   (*) True
                                        & (m,n) <- AND                     (*) True
                                        & (True, False) = m                (*) True
                                    }
                  = ( \ { e } . e ) { False }
                  = False                                                  (*) we have output!
+```
 
-  and True = (\ a . \ b . ( \ { e } . e ) { n : -> AND (Bool * Bool) Bool
+```
+  and True = ( /\ a . /\ b . ( /\ { e } . e ) { n : -> (Bool * Bool) Bool AND
                                               & (a,b) <- (Bool * Bool)
                                               & (m,n) <- AND
                                               & (a,b) = m
-                                          }) True
-                 = \ b . ( \ { e } . e ) { n : -> AND (Bool * Bool) Bool   (*) True
-                                             & (True, b) <- (Bool * Bool)  (*) ?
-                                             & (m,n) <- AND                (*) ?
-                                             & (True, b) = m               (*) ?
-                                         }
-                                                                           (*) we have currying!
+                                              }) True
+                 = /\ b . ( /\ { e } . e ) { n : -> (Bool * Bool) Bool AND  (*) True
+                                               & (True, b) <- (Bool * Bool) (*) ?
+                                               & (m,n) <- AND               (*) ?
+                                               & (True, b) = m              (*) ?
+                                           }                                (*) we have currying!
 ```
