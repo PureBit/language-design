@@ -3,18 +3,11 @@ Formal Grammar
 
 This document houses the formal grammar of PureBit.
 
-I have decided to design the language using one FG document to make it easier
-for me to keep track of the production rules. The rules herein are incomplete,
-and very much rely on Haskell and Habit for reference.
-
-N.B. I have yet to work out the theoretical elements of PureBit. Until that
-hard work is done, everything here is mere suggestion.
-
 Credit
 ------
 
 I want to make it *very* clear here that this document is *very* indebted to
-the Preliminary Habit Report[1] and the Haskell 2010 Report[2]. Much of the
+the Preliminary Habit Report[1] and the Haskell 2010 Report[2]. A lot of the
 following is ripped straight out of the two with little modification.
 
 Notation Conventions
