@@ -10,15 +10,13 @@ few extensions:
 * Impredicativity
 * Recursion
 * Exceptions
-* Low level data types
 
 N.B. This gets me *very* close to where I want to go with PureBit. That said,
 there is one glaring question: can this support implicit functions, giving
 PureBit modular type classes? I have spoken with both Dreyer & Rossberg, and
 they strongly believe that it is. However, until they release a paper proving
-this, I am just going to stick to explicit modules (if they take too long,
-I'll just try to prove it myself, but I'm no genius, so who knows how far I'll
-get with this).
+that this is so, I am just going to stick to explicit modules (if they take too
+long, I'll just try to do so myself).
 
 ```
   t ::=                                    (*) terms:
@@ -56,11 +54,9 @@ get with this).
     T T                                    (*) operator application
     { l^i : T^i }                          (*) type of records, where i <- 1..n
     wrap T                                 (*) impredicativity
-    Bit                                    (*) bit variant type
-    Ord                                    (*) proper von Neumann ordinal kind
 
   K  : :=                                  (*) kinds:
-    Bitdata                                (*) proper memory area kind
+    *                                      (*) kind of proper types
     K -> K                                 (*) kind of operators
 
   Y  : :=                                  (*) contexts:
