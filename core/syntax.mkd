@@ -1,73 +1,72 @@
 Core Syntax
 ===========
 
-Basic Syntax
-------------
-
-All productions in Core must adhere to the following production rules:
-
 ```
-  Term ::=
-    Object
-    Lambda
+  t ::=                                    (*) terms:
+    x                                      (*) variable
+    /\ x : T -> t                          (*) abstraction
+    t t                                    (*) application
+    /\ X : K -> t                          (*) type abstraction
+    t T                                    (*) type application
+    t : T                                  (*) type ascription
+    { l^i := t^i }                         (*) record, where i <- 1..n.
+                                           (*) Elements separated by `,`
+    t.l                                    (*) projection
+    < l^i := t^i > : T                     (*) tagging, where i <- 1..n (uses
+                                           (*) `{ ... }` in external language).
+                                           (*) Elements separated by `,`
+    case t of < l^i := t1^i > -> t2^i      (*) case, where i <- 1..n
+    { T, t } : T                           (*) packing
+    let { X, x } := t in t                 (*) unpacking
+    wrap X : T                             (*) impredicativity
+    unwrap X : T                           (*) impredicativity
+    fix t                                  (*) general recursion
+    raise t                                (*) raise exception
+    try t with t                           (*) handle exceptions
 
-  Object :=
-    x                                          variable
-    x := Term                                  label
-    Set
+  T ::=                                    (*) types:
+    X                                      (*) type variable
+    T -> T                                 (*) function type
+    A X : K -> T                           (*) universal type
+    E X : K -> T                           (*) existential type
+    /\ X : K -> T                          (*) operator abstraction
+    T T                                    (*) operator application
+    { l^i : T^i }                          (*) type of records, where i <- 1..n.
+                                           (*) Elements separated by `,`
+    < l^i : T^i >                          (*) type of variants, where i <- 1..n
+                                           (*) Elements separated by `,`
+    wrap T                                 (*) impredicativity
+    Bit                                    (*) bit type
 
-  Lambda ::=
-    /\ x . Term                                abstraction
-    /\ x . { x }                               set introduction
-    /\ { x } . x                               set elimination
-    Lambda Term                                application
+  Bit ::=
+      Off                                  (*) off, or bit = 0
+      On                                   (*) on, or bit = 1
 
-  Set ::=
-    {}                                         empty set
-    { Elements }                               inhabited set
-    { Object : Predicate }                     class
-    { Elements }.Object                        selection
-    Tpl                                        tuple
+  K ::=                                    (*) kinds:
+    *                                      (*) kind of proper types
+    K -> K                                 (*) kind of operators
 
-  Elements ::=
-    Object
-    Object, Elements                           set of elements
-
-  Predicate ::=                                predicates:
-    False                                      truth value
-    True                                       truth value
-    ~Predicate                                 negation
-    Predicate & Predicate                      conjunction
-    Predicate | Predicate                      disjunction
-    Term = Term                                equality
-    Object <- Set                              membership
-    E ( Object <- Set ) Predicate              existential quantifier
+  Y ::=                                    (*) contexts:
+    0                                      (*) empty context
+    Y, x : T                               (*) term variable binding
+    Y, X : K                               (*) type variable binding
 ```
 
-Derived Syntax
---------------
+Notes
+-----
 
-```
-  Tpl ::=                                      tuples:
-    ()                                         unit
-    ( Object )                                 singleton
-    ( Object, Object )                         pair
-    ( Object, Tpl )                            tuple
-    Tpl.Object                                 selection
+Not defined above (for they are fully derived from the above) are the types:
+* *Ord.* This is a recursively defined empty record. It functions as a natural
+  number type. Operations will be available to make defining vectors
+  straightforward.
 
-  () ::=
-    {}
+* *Tuple.* These are defined per Kuratowski's representation of an ordered pair.
 
-  ( Object ) ::=
-    { Object }
+* *Area.* This is a tuple of an ordering of pairs and bits, e.g.
+  `( (0, Off), (1,Off), (2, On), (3, Off), (4, Off), (5, On) )`,
+  which is equivalent to B001001.
 
-  ( Object, Object ) ::=
-    { fst := Object
-    , snd := Object
-    }
-
-  ( Object, Tpl ) ::=
-    { fst := Object
-    , snd := Tpl
-    }
-```
+Not encoded at the syntax level is the bit data restriction; namely, that all
+proper kinds decompose into types composed of bits and/or ordinals. That is,
+if the programmer attempts to define a type that is not composed of bits and/or
+ordinals, then the source language will not compile. This isn't Haskell, folks!
