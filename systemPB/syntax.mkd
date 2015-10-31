@@ -25,27 +25,26 @@ long, I'll just try to do so myself).
     t t                                    (*) application
     /\ X : K . t                           (*) type abstraction
     t T                                    (*) type application
-    t : T                                  (*) type ascription
+    t as T                                 (*) type ascription
     { l^i := t^i }                         (*) record, where i <- 1..n
     t.l                                    (*) projection
-    { T, t } : T                           (*) packing
+    { T, t } as T                          (*) packing
     let { X, x } := t in t                 (*) unpacking
-    < l^i := t^i > : T                     (*) tagging, where i <- 1..n (uses
-                                           (*) `{ ... }` in external language)
-    case t of < l^i := x^i > -> t^i        (*) case, where i <- 1..n
-    wrap X : T                             (*) impredicativity
-    unwrap X : T                           (*) impredicativity
+    < l^i := t^i > as T                    (*) tagging, where i <- 1..n
+    case t of < l^i := x^i > |-> t^i       (*) case, where i <- 1..n
+    wrap X as T                            (*) impredicativity
+    unwrap X as T                          (*) impredicativity
     fix t                                  (*) general recursion
     raise t                                (*) raise exception
     try t with t                           (*) handle exceptions
 
-  v  : :=                                  (*) values:
+  v ::=                                    (*) values:
     /\ x : T . t                           (*) abstraction value
     /\ X : K . t                           (*) type abstraction value
-    { l^i  : = v^i }                       (*) record value, where i <- 1..n
-    { T, t } : T                           (*) package value
+    { l^i as v^i }                         (*) record value, where i <- 1..n
+    { T, t } as T                          (*) package value
 
-  T  : :=                                  (*) types:
+  T ::=                                    (*) types:
     X                                      (*) type variable
     T -> T                                 (*) function type
     A X : K . K                            (*) universal type
@@ -55,11 +54,11 @@ long, I'll just try to do so myself).
     { l^i : T^i }                          (*) type of records, where i <- 1..n
     wrap T                                 (*) impredicativity
 
-  K  : :=                                  (*) kinds:
+  K ::=                                    (*) kinds:
     *                                      (*) kind of proper types
     K -> K                                 (*) kind of operators
 
-  Y  : :=                                  (*) contexts:
+  Y ::=                                    (*) contexts:
     0                                      (*) empty context
     Y, x : T                               (*) term variable binding
     Y, X : K                               (*) type variable binding
