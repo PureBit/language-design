@@ -4,22 +4,22 @@ Core Syntax
 ```
   t ::=                                    (*) terms:
     x                                      (*) variable
-    /\ x : T -> t                          (*) abstraction
+    /\ x : T . t                           (*) abstraction
     t t                                    (*) application
-    /\ X : K -> t                          (*) type abstraction
+    /\ X : K . t                           (*) type abstraction
     t T                                    (*) type application
-    t : T                                  (*) type ascription
+    t as T                                 (*) type ascription
     { l^i := t^i }                         (*) record, where i <- 1..n.
                                            (*) Elements separated by `,`
     t.l                                    (*) projection
-    < l^i := t^i > : T                     (*) tagging, where i <- 1..n (uses
+    < l^i := t^i > as T                    (*) tagging, where i <- 1..n (uses
                                            (*) `{ ... }` in external language).
                                            (*) Elements separated by `,`
-    case t of < l^i := t1^i > -> t2^i      (*) case, where i <- 1..n
-    { T, t } : T                           (*) packing
+    case t of < l^i := t1^i > |-> t2^i     (*) case, where i <- 1..n
+    { T, t } as T                          (*) packing
     let { X, x } := t in t                 (*) unpacking
-    wrap X : T                             (*) impredicativity
-    unwrap X : T                           (*) impredicativity
+    wrap X as T                            (*) impredicativity
+    unwrap X as T                          (*) impredicativity
     fix t                                  (*) general recursion
     raise t                                (*) raise exception
     try t with t                           (*) handle exceptions
@@ -27,13 +27,13 @@ Core Syntax
   T ::=                                    (*) types:
     X                                      (*) type variable
     T -> T                                 (*) function type
-    A X : K -> T                           (*) universal type
-    E X : K -> T                           (*) existential type
-    /\ X : K -> T                          (*) operator abstraction
+    A X : K . T                            (*) universal type
+    E X : K . T                            (*) existential type
+    /\ X : K . T                           (*) operator abstraction
     T T                                    (*) operator application
-    { l^i : T^i }                          (*) type of records, where i <- 1..n.
+    { l^i as T^i }                         (*) type of records, where i <- 1..n.
                                            (*) Elements separated by `,`
-    < l^i : T^i >                          (*) type of variants, where i <- 1..n
+    < l^i as T^i >                         (*) type of variants, where i <- 1..n
                                            (*) Elements separated by `,`
     wrap T                                 (*) impredicativity
     Bit                                    (*) bit type
@@ -44,12 +44,12 @@ Core Syntax
 
   K ::=                                    (*) kinds:
     *                                      (*) kind of proper types
-    K -> K                                 (*) kind of operators
+    K . K                                 (*) kind of operators
 
   Y ::=                                    (*) contexts:
     0                                      (*) empty context
-    Y, x : T                               (*) term variable binding
-    Y, X : K                               (*) type variable binding
+    Y, x as T                              (*) term variable binding
+    Y, X as K                              (*) type variable binding
 ```
 
 Notes
