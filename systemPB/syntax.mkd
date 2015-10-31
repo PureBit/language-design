@@ -38,12 +38,6 @@ long, I'll just try to do so myself).
     raise t                                (*) raise exception
     try t with t                           (*) handle exceptions
 
-  v ::=                                    (*) values:
-    /\ x : T . t                           (*) abstraction value
-    /\ X : K . t                           (*) type abstraction value
-    { l^i as v^i }                         (*) record value, where i <- 1..n
-    { T, t } as T                          (*) package value
-
   T ::=                                    (*) types:
     X                                      (*) type variable
     T -> T                                 (*) function type
@@ -52,6 +46,7 @@ long, I'll just try to do so myself).
     /\ X : K . K                           (*) operator abstraction
     T T                                    (*) operator application
     { l^i : T^i }                          (*) type of records, where i <- 1..n
+    < l^i : T^i >                          (*) type of variants, where i <- 1..n
     wrap T                                 (*) impredicativity
 
   K ::=                                    (*) kinds:
