@@ -18,9 +18,6 @@ Core Syntax
     case t of < l^i := t1^i > |-> t2^i     (*) case, where i <- 1..n
     { T, t } as T                          (*) packing
     let { X, x } := t in t                 (*) unpacking
-    wrap X as T                            (*) impredicativity
-    unwrap X as T                          (*) impredicativity
-    fix t                                  (*) general recursion
     raise t                                (*) raise exception
     try t with t                           (*) handle exceptions
 
@@ -35,7 +32,6 @@ Core Syntax
                                            (*) Elements separated by `,`
     < l^i as T^i >                         (*) type of variants, where i <- 1..n
                                            (*) Elements separated by `,`
-    wrap T                                 (*) impredicativity
     Bit                                    (*) bit type
 
   Bit ::=
@@ -44,7 +40,7 @@ Core Syntax
 
   K ::=                                    (*) kinds:
     *                                      (*) kind of proper types
-    K . K                                 (*) kind of operators
+    K . K                                  (*) kind of operators
 
   Y ::=                                    (*) contexts:
     0                                      (*) empty context
@@ -70,3 +66,7 @@ Not encoded at the syntax level is the bit data restriction; namely, that all
 proper kinds decompose into types composed of bits and/or ordinals. That is,
 if the programmer attempts to define a type that is not composed of bits and/or
 ordinals, then the source language will not compile. This isn't Haskell, folks!
+
+Finally, I've decided to go ahead and add modular type classes to PureBit.
+However, the overloading and instance resolution will occur in the external
+language, at least as much as Core will allow.

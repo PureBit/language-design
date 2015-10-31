@@ -11,12 +11,14 @@ few extensions:
 * Recursion
 * Exceptions
 
-N.B. This gets me *very* close to where I want to go with PureBit. That said,
+N.B. ~~This gets me *very* close to where I want to go with PureBit. That said,
 there is one glaring question: can this support implicit functions, giving
 PureBit modular type classes? I have spoken with both Dreyer & Rossberg, and
 they strongly believe that it is. However, until they release a paper proving
 that this is so, I am just going to stick to explicit modules (if they take too
-long, I'll just try to do so myself).
+long, I'll just try to do so myself).~~ Actually, this *does* get me everything
+that I want. Of course, I will have to figure out overloading and instance
+resolution in the source language, but I'm confident I'll figure it out.
 
 ```
   t ::=                                    (*) terms:
@@ -32,9 +34,6 @@ long, I'll just try to do so myself).
     let { X, x } := t in t                 (*) unpacking
     < l^i := t^i > as T                    (*) tagging, where i <- 1..n
     case t of < l^i := x^i > |-> t^i       (*) case, where i <- 1..n
-    wrap X as T                            (*) impredicativity
-    unwrap X as T                          (*) impredicativity
-    fix t                                  (*) general recursion
     raise t                                (*) raise exception
     try t with t                           (*) handle exceptions
 
@@ -47,7 +46,6 @@ long, I'll just try to do so myself).
     T T                                    (*) operator application
     { l^i : T^i }                          (*) type of records, where i <- 1..n
     < l^i : T^i >                          (*) type of variants, where i <- 1..n
-    wrap T                                 (*) impredicativity
 
   K ::=                                    (*) kinds:
     *                                      (*) kind of proper types
