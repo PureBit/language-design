@@ -1,58 +1,87 @@
 System PB Syntax
 ================
 
-System PB is just (a strictly evaluating) System F-Omega with a
-few extensions:
-* Ascription
-* Records
-* Variants
-* Existential types
-* Impredicativity
-* Recursion
-* Exceptions
+I really like Cayenne. I feel that it hits the sweet spot on everything that I
+want in a language - except that type checking is undecidable.
 
-N.B. ~~This gets me *very* close to where I want to go with PureBit. That said,
-there is one glaring question: can this support implicit functions, giving
-PureBit modular type classes? I have spoken with both Dreyer & Rossberg, and
-they strongly believe that it is. However, until they release a paper proving
-that this is so, I am just going to stick to explicit modules (if they take too
-long, I'll just try to do so myself).~~ Actually, this *does* get me everything
-that I want. Of course, I will have to figure out overloading and instance
-resolution in the source language, but I'm confident I'll figure it out.
+There are two - possibly three - ways to address this:
+* *Cayenne's way.*
+
+  Augustsson chose to simply error out if type checking took too long. If
+  it happened to be that the error was not an error, but simply a particularly
+  complicated type check, the number of recursions could be increased via a
+  compiler argument.
+
+  In practice, this could work. Certainly, it is a practical backup option if
+  I can't get type checking otherwise. However, it's pragmatic solution to a
+  theoretical problem is inelegant, and I would rather not turn to it if I
+  don't have to.
+
+* *Homotopy type theory.*
+
+  Presumably, HOTT allows for convenient intensional dependent types, which
+  are decidable. However, HOTT is incredibly intimidating - not to mention
+  bleeding-edge research - and so it's far from clear whether it can be
+  used to solve decidability in this case in a useful manner.
+
+* *Bit data restriction.*
+
+  I'm currently banking on this option. Namely, given that PureBit is a systems
+  language, it stands to reason to add the Off and On terms, and restrict all
+  expressions to these. The idea is that this will be strongly normalizing.
+  However, until I can prove this, this is only a supposition.
+
+We'll see how things play out.
+
+As for the lambda calculus itself:
 
 ```
-  t ::=                                    (*) terms:
-    x                                      (*) variable
-    /\ x : T . t                           (*) abstraction
-    t t                                    (*) application
-    /\ X : K . t                           (*) type abstraction
-    t T                                    (*) type application
-    t as T                                 (*) type ascription
-    { l^i := t^i }                         (*) record, where i <- 1..n
-    t.l                                    (*) projection
-    { T, t } as T                          (*) packing
-    let { X, x } := t in t                 (*) unpacking
-    < l^i := t^i > as T                    (*) tagging, where i <- 1..n
-    case t of < l^i := x^i > |-> t^i       (*) case, where i <- 1..n
-    raise t                                (*) raise exception
-    try t with t                           (*) handle exceptions
+  Expr ::=
+    ( Varid :: Type ) -> Expr                          (*) Function type
+    \ ( Varid :: Type ) -> Expr                        (*) Abstraction
+    Expr Expr                                          (*) Application
+    data { Conid { Type } | }                          (*) Sum type
+    Conid @ Type                                       (*) Constructor
+    case Varid of { Arm } : Type                       (*) Sum scrutinization
+    sig { Sign }                                       (*) Record type
+    struct { Defn }                                    (*) Record value
+    Expr . Lbid                                        (*) Record projection
+    Id                                                 (*) Variable
+    #n                                                 (*) Type of Types
+    Off                                                (*) Bit value: 0
+    On                                                 (*) Bit value: 1
 
-  T ::=                                    (*) types:
-    X                                      (*) type variable
-    T -> T                                 (*) function type
-    A X : K . K                            (*) universal type
-    E X : K . K                            (*) existential type
-    /\ X : K . K                           (*) operator abstraction
-    T T                                    (*) operator application
-    { l^i : T^i }                          (*) type of records, where i <- 1..n
-    < l^i : T^i >                          (*) type of variants, where i <- 1..n
+  Arm ::=
+    ( Conid { Varid } ) -> Expr ;
+    Varid -> Expr ;
 
-  K ::=                                    (*) kinds:
-    *                                      (*) kind of proper types
-    K -> K                                 (*) kind of operators
+  Sign ::=
+    Lblid :: Type ;
+    Lblid :: Type = Expr ;
 
-  Y ::=                                    (*) contexts:
-    0                                      (*) empty context
-    Y, x : T                               (*) term variable binding
-    Y, X : K                               (*) type variable binding
+  Defn ::=
+    Vis Lblid :: Type = Expr ;
+
+  Vis ::=
+    private
+    public Abs
+
+  Abs ::=
+    abstract
+    concrete
+
+  Type ::=
+    Expr
+
+  Varid ::=
+    Id
+
+  Conid ::=
+    Id
+
+  Lblid ::=
+    Id
 ```
+
+N.B. Everything is an expression. The other production categories are simply to
+make the grammar more readable.
