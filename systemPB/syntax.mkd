@@ -40,7 +40,7 @@ As for the lambda calculus itself:
     ( Varid :: Type ) -> Expr                          (*) Function type
     \ ( Varid :: Type ) -> Expr                        (*) Abstraction
     Expr Expr                                          (*) Application
-    data { Conid { Type } | }                          (*) Sum type
+    data { Conid { Type } | absurd }                   (*) Sum type
     Conid @ Type                                       (*) Constructor
     case Varid of { Arm } : Type                       (*) Sum scrutinization
     sig { Sign }                                       (*) Record type
@@ -48,8 +48,16 @@ As for the lambda calculus itself:
     Expr . Lbid                                        (*) Record projection
     Id                                                 (*) Variable
     #n                                                 (*) Type of Types
-    Off                                                (*) Bit value: 0
-    On                                                 (*) Bit value: 1
+    Bit                                                (*) Bit types
+    Nat                                                (*) Natural numbers
+
+  Bit ::=
+    off
+    on
+
+  Nat ::=
+    0
+    Succ Nat
 
   Arm ::=
     ( Conid { Varid } ) -> Expr ;
@@ -57,10 +65,10 @@ As for the lambda calculus itself:
 
   Sign ::=
     Lblid :: Type ;
-    Lblid :: Type = Expr ;
+    Lblid :: Type := Expr ;
 
   Defn ::=
-    Vis Lblid :: Type = Expr ;
+    Vis Lblid :: Type := Expr ;
 
   Vis ::=
     private
@@ -83,5 +91,15 @@ As for the lambda calculus itself:
     Id
 ```
 
-N.B. Everything is an expression. The other production categories are simply to
-make the grammar more readable.
+Notes:
+* Everything is an expression. The other production categories are simply to
+  make the grammar more readable.
+
+* Every value must reduce to a bit, a natural number, or absurd.
+
+* Bits are for computation.
+
+* Natural numbers are for enumerated types.
+
+* In order to make the above useful, the external language will have to employ
+  very fancy inference.
