@@ -1,0 +1,40 @@
+Notes
+=====
+
+* *Why dependent typing.*
+
+  I really like Cayenne. I feel that it hits the sweet spot on everything that I
+  want in a language - except that type checking is undecidable.
+
+  There are two - possibly three - ways to address this:
+  * *Cayenne's way.*
+
+    Augustsson chose to simply error out if type checking took too long. If
+    it happened to be that the error was not an error, but simply a particularly
+    complicated type check, the number of recursions could be increased via a
+    compiler argument.
+
+    In practice, this could work. Certainly, it is a practical backup option if
+    I can't get type checking otherwise. However, it's pragmatic solution to a
+    theoretical problem is inelegant, and I would rather not turn to it if I
+    don't have to.
+
+  * *Homotopy type theory.*
+
+    Presumably, HOTT allows for convenient intensional dependent types, which
+    are decidable. However, HOTT is incredibly intimidating - not to mention
+    bleeding-edge research - and so it's far from clear whether it can be
+    used to solve decidability in this case in a useful manner.
+
+  * *Bit data restriction.*
+
+    I'm currently banking on this option. Namely, given that PureBit is a systems
+    language, it stands to reason to add the Off and On terms, and restrict all
+    expressions to these. The idea is that this will be strongly normalizing.
+    However, until I can prove this, this is only a supposition.
+
+  We'll see how things play out.
+
+* *Quantification.*
+
+  All type ascription has an implicit `∀`.
