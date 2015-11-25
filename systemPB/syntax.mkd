@@ -65,6 +65,9 @@ Notes:
   Alt ::=
     Pat |-> Expr
 
+  Pat ::=
+    ???
+
   Record ::=
     sig { Sign }                                 (*) Record type
     struct { Defn }                              (*) Record definition
@@ -83,9 +86,6 @@ Notes:
     public
 
   Varid ::=
-    Id
-
-  Conid ::=
     Id
 
   Lblid ::=
