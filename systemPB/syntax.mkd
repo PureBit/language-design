@@ -1,55 +1,41 @@
 System PB Syntax
 ================
 
-I really like Cayenne. I feel that it hits the sweet spot on everything that I
-want in a language - except that type checking is undecidable.
+Todo:
+* Patterns
+* Evaluation rules
+* Ensure type checking is decidable
 
-There are two - possibly three - ways to address this:
-* *Cayenne's way.*
+Notes:
+* Everything is an expression. The other production categories are simply to
+  make the concepts clearer.
 
-  Augustsson chose to simply error out if type checking took too long. If
-  it happened to be that the error was not an error, but simply a particularly
-  complicated type check, the number of recursions could be increased via a
-  compiler argument.
+* Bits are for computation.
 
-  In practice, this could work. Certainly, it is a practical backup option if
-  I can't get type checking otherwise. However, it's pragmatic solution to a
-  theoretical problem is inelegant, and I would rather not turn to it if I
-  don't have to.
+* Natural numbers serve many functions: constructors in sized bit vector types,
+  dummy values for new data types, etc.
 
-* *Homotopy type theory.*
-
-  Presumably, HOTT allows for convenient intensional dependent types, which
-  are decidable. However, HOTT is incredibly intimidating - not to mention
-  bleeding-edge research - and so it's far from clear whether it can be
-  used to solve decidability in this case in a useful manner.
-
-* *Bit data restriction.*
-
-  I'm currently banking on this option. Namely, given that PureBit is a systems
-  language, it stands to reason to add the Off and On terms, and restrict all
-  expressions to these. The idea is that this will be strongly normalizing.
-  However, until I can prove this, this is only a supposition.
-
-We'll see how things play out.
-
-As for the lambda calculus itself:
+* The external language will have to employ very fancy inference, as this is a
+  PITA to program in.
 
 ```
   Expr ::=
-    ( Varid :: Type ) -> Expr                          (*) Function type
-    \ ( Varid :: Type ) -> Expr                        (*) Abstraction
-    Expr Expr                                          (*) Application
-    data { Conid { Type } | absurd }                   (*) Sum type
-    Conid @ Type                                       (*) Constructor
-    case Varid of { Arm } : Type                       (*) Sum scrutinization
-    sig { Sign }                                       (*) Record type
-    struct { Defn }                                    (*) Record value
-    Expr . Lbid                                        (*) Record projection
-    Id                                                 (*) Variable
-    #n                                                 (*) Type of Types
-    Bit                                                (*) Bit types
-    Nat                                                (*) Natural numbers
+    Type
+    Data
+    Lambda
+    Sum
+    Record
+
+  Type ::=
+    Expr
+
+  Data ::=
+    absurd
+    Bit
+    Nat
+    #                                            (*) Kind
+    Id                                           (*) Variable
+    _                                            (*) Wildcard (underscore)
 
   Bit ::=
     off
@@ -57,29 +43,44 @@ As for the lambda calculus itself:
 
   Nat ::=
     0
-    Succ Nat
+    succ Nat
 
-  Arm ::=
-    ( Conid { Varid } ) -> Expr ;
-    Varid -> Expr ;
+  Lambda ::=
+    ( Varid : Type ) -> Expr                     (*) Function type
+    /\ ( Varid : Type ) |-> Expr                 (*) Abstraction
+    Expr Expr                                    (*) Application
+
+  Sum ::=
+    data { VVElems }                             (*) Variant declaration
+    match Expr with { Alts }                     (*) Variant scrutinization
+
+  VVElems ::=
+    Lblid := Expr
+    Lblid := Expr ; VVElems
+
+  Alts ::=
+    Alt
+    Alt ; Alts
+
+  Alt ::=
+    Pat |-> Expr
+
+  Record ::=
+    sig { Sign }                                 (*) Record type
+    struct { Defn }                              (*) Record definition
+    Expr . Lblid                                 (*) Record projection
 
   Sign ::=
-    Lblid :: Type ;
-    Lblid :: Type := Expr ;
+    Lblid : Type
+    Lblid : Type ; Sign
 
   Defn ::=
-    Vis Lblid :: Type := Expr ;
+    Vis Lblid : Type := Expr
+    Vis Lblid : Type := Expr ; Defn
 
   Vis ::=
     private
-    public Abs
-
-  Abs ::=
-    abstract
-    concrete
-
-  Type ::=
-    Expr
+    public
 
   Varid ::=
     Id
@@ -90,16 +91,3 @@ As for the lambda calculus itself:
   Lblid ::=
     Id
 ```
-
-Notes:
-* Everything is an expression. The other production categories are simply to
-  make the grammar more readable.
-
-* Every value must reduce to a bit, a natural number, or absurd.
-
-* Bits are for computation.
-
-* Natural numbers are for enumerated types.
-
-* In order to make the above useful, the external language will have to employ
-  very fancy inference.
