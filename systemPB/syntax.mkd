@@ -2,7 +2,6 @@ System PB Syntax
 ================
 
 Todo:
-* Patterns
 * Evaluation rules
 * Ensure type checking is decidable
 
@@ -12,16 +11,20 @@ Notes:
 
 * Bits are for computation.
 
-* Natural numbers serve many functions: constructors in sized bit vector types,
+* Natural numbers serve have many uses: constructors in sized bit vector types,
   dummy values for new data types, etc.
 
 * The external language will have to employ very fancy inference, as this is a
-  PITA to program in.
+  PITA to program in as is.
+
+* Is the `absurd` data constructor necessary?
+
+  Probably.
 
 ```
   Expr ::=
     Type
-    Data
+    Data                                          (*) Data constructors
     Lambda
     Sum
     Record
@@ -33,9 +36,8 @@ Notes:
     absurd
     Bit
     Nat
-    #                                            (*) Kind
-    Id                                           (*) Variable
-    _                                            (*) Wildcard (underscore)
+    *                                             (*) Kind
+    Id                                            (*) Variable
 
   Bit ::=
     off
@@ -43,39 +45,35 @@ Notes:
 
   Nat ::=
     0
-    succ Nat
+    succ Nat                                      (*) Sugared up to [1 .. n]
 
   Lambda ::=
-    ( Varid : Type ) -> Expr                     (*) Function type
-    /\ ( Varid : Type ) |-> Expr                 (*) Abstraction
-    Expr Expr                                    (*) Application
+    ( Varid : Type ) -> Expr                      (*) Function type
+    /\ ( Varid : Type ) -> Expr                   (*) Abstraction
+    Expr Expr                                     (*) Application
 
   Sum ::=
-    data { VVElems }                             (*) Variant declaration
-    match Expr with { Alts }                     (*) Variant scrutinization
-
-  VVElems ::=
-    Lblid := Expr
-    Lblid := Expr ; VVElems
+    data { VVElems }                              (*) Sum type
+    Conid @ Type                                  (*) Constructor
+    case Varid of { Alts } :: Type                (*) Sum scrutinization
 
   Alts ::=
     Alt
     Alt ; Alts
 
   Alt ::=
-    Pat |-> Expr
-
-  Pat ::=
-    ???
+    ( Conid { Varids } ) -> Expr
+    Varid -> Expr
 
   Record ::=
-    sig { Sign }                                 (*) Record type
-    struct { Defn }                              (*) Record definition
-    Expr . Lblid                                 (*) Record projection
+    sig { Sign }                                   (*) Record type
+    struct { Defn }                                (*) Record instance
+    Expr . Lblid                                   (*) Record projection
 
   Sign ::=
     Lblid : Type
-    Lblid : Type ; Sign
+    Lblid : Type := Expr
+    Sign; Sign
 
   Defn ::=
     Vis Lblid : Type := Expr
@@ -83,10 +81,18 @@ Notes:
 
   Vis ::=
     private
-    public
+    public Abs
+
+  Abs ::=
+    abstract
+    concrete
 
   Varid ::=
     Id
+
+  Varids ::=
+    Varid
+    Varid ; Varids
 
   Lblid ::=
     Id
