@@ -2,6 +2,7 @@ System PB Syntax
 ================
 
 Todo:
+* Patterns
 * Evaluation rules
 * Ensure type checking is decidable
 
@@ -53,9 +54,9 @@ Notes:
     Expr Expr                                     (*) Application
 
   Sum ::=
-    data { VVElems }                              (*) Sum type
+    data EITHER(LIST( Conid LIST Type ), absurd ) (*) Sum type
     Conid @ Type                                  (*) Constructor
-    case Varid of { Alts } :: Type                (*) Sum scrutinization
+    case Varid of { SEP( Arm, ; ) } : Type        (*) Sum scrutinization
 
   Alts ::=
     Alt
