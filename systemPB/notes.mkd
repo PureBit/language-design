@@ -1,0 +1,5 @@
+Notes
+=====
+
+Syntax:
+* System PB is a straight-copy of Core Cayenne.
