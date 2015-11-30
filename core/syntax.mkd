@@ -6,16 +6,15 @@ Syntax:
 ```
   Expr ::=
     ( Varid : Type ) -> Expr                              (*) function type
-    /\ ( Varid : type ) -> Expr                           (*) abstraction
+    /\ Varid : type . Expr                                (*) abstraction
     Expr Expr                                             (*) application
     data { Conid { Type } | }                             (*) sum type
-    Conid @ Type                                          (*) constructor
     case Varid of { Arm } : Type                          (*) sum scrutinization
     sig { Sign }                                          (*) record type
     struct { Defn }                                       (*) record formation
-    Expr . Lblid                                          (*) record projection
+    Expr :: Lblid                                         (*) record projection
     Id                                                    (*) variable
-    #n                                                    (*) type of types
+    *                                                     (*) type of types
 
   Arm ::=
     ( Conid { Varid } ) -> Expr ;
