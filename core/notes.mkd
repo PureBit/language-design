@@ -1,0 +1,6 @@
+Core
+====
+
+Notes:
+* I still have to work out the evaluation rules, but hopefully I can restrict
+  Cayenne such that it becomes decidable but still be powerful.

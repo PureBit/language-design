@@ -1,0 +1,60 @@
+Core
+====
+
+Syntax:
+
+```
+  Expr ::=
+    ( Varid : Type ) -> Expr                              (*) function type
+    /\ ( Varid : type ) -> Expr                           (*) abstraction
+    Expr Expr                                             (*) application
+    data { Conid { Type } | }                             (*) sum type
+    Conid @ Type                                          (*) constructor
+    case Varid of { Arm } : Type                          (*) sum scrutinization
+    sig { Sign }                                          (*) record type
+    struct { Defn }                                       (*) record formation
+    Expr . Lblid                                          (*) record projection
+    Id                                                    (*) variable
+    #n                                                    (*) type of types
+
+  Arm ::=
+    ( Conid { Varid } ) -> Expr ;
+    Varid -> Expr ;
+
+  Sign ::=
+    Lblid : Type ;
+    Lblid : Type := Expr ;
+
+  Defn ::=
+    Vis Lblid : Type := Expr ;
+
+  Vis ::=
+    private
+    public Abs
+
+  Abs ::=
+    abstract
+    concrete
+
+  Type ::=
+    Expr
+    Bit
+    Ord
+
+  Bit ::=
+    off
+    on
+
+  Ord ::=
+    0
+    succ Ord
+
+  Varid ::=
+    Id
+
+  Conid ::=
+    Id
+
+  Lblid ::=
+    Id
+```
